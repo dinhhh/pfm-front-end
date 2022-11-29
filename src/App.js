@@ -5,6 +5,7 @@ import LoginPage from './pages/login';
 import Home from './pages/home';
 import Register from './pages/register'
 import ForgotPassword from './pages/forgotPassword';
+import AddRecord from './pages/income-expense/addRecord';
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
                     <Route path="/home" component={Home} />
                     <Route path="/register" component={Register} />
                     <Route path="/forgot-password" component={ForgotPassword} />
+                    <Route path="/income-expense/add-record" component={AddRecord} />
                     <Redirect to="/" />
                 </Switch>
             </Router>
