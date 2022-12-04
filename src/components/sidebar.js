@@ -26,7 +26,7 @@ const Sidebar = () => {
     // < !--Main Sidebar Container-- >
     <aside className="main-sidebar sidebar-dark-primary elevation-4">
       {/* Brand Logo */}
-      <a href="index3.html" className="brand-link">
+      <a href="/home" className="brand-link">
         <img src="../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" className="brand-image img-circle elevation-3" style={{ opacity: '.8' }} />
         <span className="brand-text font-weight-light">AdminLTE 3</span>
       </a>
@@ -64,7 +64,7 @@ const Sidebar = () => {
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a href="#" className="nav-link">
+                  <a href="/income-expense/statistic" className="nav-link">
                     <i className="far fa-circle nav-icon" />
                     <p>Thống kê</p>
                   </a>

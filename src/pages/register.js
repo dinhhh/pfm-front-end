@@ -6,10 +6,10 @@ const Register = () => {
             <div className="register-box">
                 <div className="card">
                     <div className="card-body register-card-body">
-                        <p className="login-box-msg">Register a new membership</p>
+                        <p className="login-box-msg">Đăng ký tài khoản mới</p>
                         <form action="../../index.html" method="post">
                             <div className="input-group mb-3">
-                                <input type="text" className="form-control" placeholder="Full name" />
+                                <input type="text" className="form-control" placeholder="Họ tên" />
                                 <div className="input-group-append">
                                     <div className="input-group-text">
                                         <span className="fas fa-user" />
@@ -25,7 +25,7 @@ const Register = () => {
                                 </div>
                             </div>
                             <div className="input-group mb-3">
-                                <input type="password" className="form-control" placeholder="Password" />
+                                <input type="password" className="form-control" placeholder="Mật khẩu" />
                                 <div className="input-group-append">
                                     <div className="input-group-text">
                                         <span className="fas fa-lock" />
@@ -33,39 +33,31 @@ const Register = () => {
                                 </div>
                             </div>
                             <div className="input-group mb-3">
-                                <input type="password" className="form-control" placeholder="Retype password" />
+                                <input type="password" className="form-control" placeholder="Nhập lại mật khẩu" />
                                 <div className="input-group-append">
                                     <div className="input-group-text">
                                         <span className="fas fa-lock" />
                                     </div>
                                 </div>
                             </div>
-                            <div className="row">
-                                <div className="col-8">
-                                    <div className="icheck-primary">
-                                        <input type="checkbox" id="agreeTerms" name="terms" defaultValue="agree" />
-                                        <label htmlFor="agreeTerms">
-                                            I agree to the <a href="#">terms</a>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div className="col-4">
-                                    <button type="submit" className="btn btn-primary btn-block">Register</button>
+                            <div className="text-center">
+                                <div className="col-6">
+                                    <button type="submit" className="btn btn-primary btn-block">Đăng ký</button>
                                 </div>
                             </div>
                         </form>
                         <div className="social-auth-links text-center">
-                            <p>- OR -</p>
+                            <p>- Hoặc -</p>
                             <a href="#" className="btn btn-block btn-primary">
                                 <i className="fab fa-facebook mr-2" />
-                                Sign up using Facebook
+                                Đăng nhập sử dụng Facebook
                             </a>
                             <a href="#" className="btn btn-block btn-danger">
                                 <i className="fab fa-google-plus mr-2" />
-                                Sign up using Google+
+                                Đăng nhập sử dụng Google+
                             </a>
                         </div>
-                        <Link to="/">I already have a membership</Link>
+                        <Link to="/">Tôi đã có tài khoản</Link>
                     </div>
                 </div>
             </div>

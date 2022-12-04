@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Header from "../../components/header";
 import Sidebar from "../../components/sidebar";
 import DateTimePicker from "react-datetime-picker";
@@ -174,8 +174,8 @@ const AddRecord = () => {
 
   return (
     <div>
-      <Header></Header>
-      <Sidebar></Sidebar>
+      <Header />
+      <Sidebar />
       <div className="content-wrapper">
         <section className="content-header">
           <div className="content-fluid">
@@ -194,7 +194,7 @@ const AddRecord = () => {
             </div>
           </div>
         </section>
-        <AddRecordForm></AddRecordForm>
+        <AddRecordForm />
       </div>
 
     </div>

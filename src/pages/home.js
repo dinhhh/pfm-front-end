@@ -4,12 +4,10 @@ import Sidebar from "../components/sidebar";
 
 const Home = () => {
   return (
-    // <div>
-      <div className="wrapper">
-        <Header></Header>
-        <Sidebar></Sidebar>
-      </div>
-    // </div>
+    <div className="wrapper">
+      <Header></Header>
+      <Sidebar></Sidebar>
+    </div>
   );
 }
 
