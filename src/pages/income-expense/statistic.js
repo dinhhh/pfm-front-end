@@ -1,3 +1,6 @@
+import Badge from 'react-bootstrap/Badge';
+import ListGroup from 'react-bootstrap/ListGroup';
+import ProgressBar from "react-bootstrap/ProgressBar";
 import Sidebar from "../../components/sidebar";
 import Header from "../../components/header";
 import CanvasJSReact from "../../plugins/canvasjs-non-commercial-3.7.2/canvasjs.react";
@@ -21,7 +24,7 @@ const options = {
   }]
 };
 
-const DropDownSelectBox = ({ setShowChart }) => {
+const DropDownSelectBox = ({ setShowChart, backColor }) => {
   const handleChange = (e) => {
     const value = e.target.value;
     var newShowChart = {month: false, quarter: false, year: false};
@@ -29,8 +32,12 @@ const DropDownSelectBox = ({ setShowChart }) => {
     setShowChart(newShowChart);
   }
 
+  const styles = {
+    color: "white", backgroundColor: backColor, borderRadius: 5
+  };
+
   return (
-    <select id="select-chart" className="ml-1 card-title" style={{ color: "white", backgroundColor: "#28a745", borderRadius: 5 }} onChange={handleChange}>
+    <select id="select-chart" className="ml-1 card-title" style={styles} onChange={handleChange}>
       <option value={"month"}>theo tháng</option>
       <option value={"quarter"}>theo quý</option>
       <option value={"year"}>theo năm</option>
@@ -95,7 +102,7 @@ const ExpenseVsIncomeGraph = () => {
           <div className="card card-success">
             <div className="card-header">
               <h3 className="card-title">Tình hình thu chi</h3>
-              <DropDownSelectBox setShowChart={setShowChart} />
+              <DropDownSelectBox setShowChart={setShowChart} backColor={"#28a745"} />
               <div className="card-tools">
                 <button type="button" className="btn btn-tool" data-card-widget="collapse">
                   <i className="fas fa-minus" />
@@ -136,7 +143,7 @@ const ExpenseGraph = () => {
           <div className="card card-success">
             <div className="card-header">
               <h3 className="card-title">Tình hình chi</h3>
-              <DropDownSelectBox setShowChart={setShowChart} />
+              <DropDownSelectBox setShowChart={setShowChart} backColor={"#28a745"} />
               <div className="card-tools">
                 <button type="button" className="btn btn-tool" data-card-widget="collapse">
                   <i className="fas fa-minus" />
@@ -177,7 +184,7 @@ const IncomeGraph = () => {
           <div className="card card-success">
             <div className="card-header">
               <h3 className="card-title">Tình hình thu</h3>
-              <DropDownSelectBox setShowChart={setShowChart} />
+              <DropDownSelectBox setShowChart={setShowChart} backColor={"#28a745"} />
               <div className="card-tools">
                 <button type="button" className="btn btn-tool" data-card-widget="collapse">
                   <i className="fas fa-minus" />
@@ -191,6 +198,186 @@ const IncomeGraph = () => {
               {showChart["month"] ? monthChart : null}
               {showChart["quarter"] ? quarterChart : null}
               {showChart["year"] ? yearChart : null}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const LendGraph = () => {
+  const primaryButtonClass = "btn btn-block btn-primary";
+  const defaultButtonClass = "btn btn-block btn-default";
+
+  const [lendButtonClass, setLendButtonClass] = useState(primaryButtonClass);
+  const [borrowButtonClass, setBorrowButtonClass] = useState(defaultButtonClass);
+  const [showLendStatistic, setShowLendStatistic] = useState(true);
+  const [showBorrowStatistic, setShowBorrowStatistic] = useState(false);
+  const [showListElement, setShowListElement] = useState(true);
+  
+  const lendButtonClick = () => {
+    if (lendButtonClass !== primaryButtonClass) {
+      setLendButtonClass(primaryButtonClass);
+      setBorrowButtonClass(defaultButtonClass);
+      // TODO: Update statistic here
+    }
+    setShowLendStatistic(true);
+    setShowBorrowStatistic(false);
+  }
+
+  const borrowButtonClick = () => {
+    if (borrowButtonClass !== primaryButtonClass) {
+      setLendButtonClass(defaultButtonClass);
+      setBorrowButtonClass(primaryButtonClass);
+      // TODO: Update statistic here
+      setShowLendStatistic(false);
+      setShowBorrowStatistic(true);
+    }
+  }
+
+  const LendStatistic = () => {
+    const List = () => {
+      return (
+        <ListGroup as="ol" numbered>
+          <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
+            <div className="ms-2 me-auto">
+              <div className="fw-bold">Việt Anh</div>
+            </div>
+            <Badge bg="primary" pill>2.000.000</Badge>
+          </ListGroup.Item>
+          <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
+            <div className="ms-2 me-auto">
+              <div className="fw-bold">Hoàng Long</div>
+            </div>
+            <Badge bg="primary" pill>800.000</Badge>
+          </ListGroup.Item>
+          <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
+            <div className="ms-2 me-auto">
+              <div className="fw-bold">Duy Anh</div>
+            </div>
+            <Badge bg="primary" pill>200.000</Badge>
+          </ListGroup.Item>
+          <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
+            <div className="ms-2 me-auto">
+              <div className="fw-bold">Việt Anh</div>
+            </div>
+            <Badge bg="primary" pill>2.000.000</Badge>
+          </ListGroup.Item>
+          <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
+            <div className="ms-2 me-auto">
+              <div className="fw-bold">Hoàng Long</div>
+            </div>
+            <Badge bg="primary" pill>800.000</Badge>
+          </ListGroup.Item>
+          <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
+            <div className="ms-2 me-auto">
+              <div className="fw-bold">Duy Anh</div>
+            </div>
+            <Badge bg="primary" pill>200.000</Badge>
+          </ListGroup.Item>
+          <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
+            <div className="ms-2 me-auto">
+              <div className="fw-bold">Việt Anh</div>
+            </div>
+            <Badge bg="primary" pill>2.000.000</Badge>
+          </ListGroup.Item>
+          <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
+            <div className="ms-2 me-auto">
+              <div className="fw-bold">Hoàng Long</div>
+            </div>
+            <Badge bg="primary" pill>800.000</Badge>
+          </ListGroup.Item>
+          <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
+            <div className="ms-2 me-auto">
+              <div className="fw-bold">Duy Anh</div>
+            </div>
+            <Badge bg="primary" pill>200.000</Badge>
+          </ListGroup.Item>
+          <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
+            <div className="ms-2 me-auto">
+              <div className="fw-bold">Việt Anh</div>
+            </div>
+            <Badge bg="primary" pill>2.000.000</Badge>
+          </ListGroup.Item>
+          <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
+            <div className="ms-2 me-auto">
+              <div className="fw-bold">Hoàng Long</div>
+            </div>
+            <Badge bg="primary" pill>800.000</Badge>
+          </ListGroup.Item>
+          <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
+            <div className="ms-2 me-auto">
+              <div className="fw-bold">Duy Anh</div>
+            </div>
+            <Badge bg="primary" pill>200.000</Badge>
+          </ListGroup.Item>
+        </ListGroup>
+      );
+    }
+
+    const showListClick = () => {
+      setShowListElement( !showListElement );
+    }
+    const now = 37.5;
+    return (
+      <div>
+        <div className='mt-2'>Tổng cho vay:<div style={{fontWeight: "bold", display: "inline"}}> 8.000.000 VNĐ</div></div>
+        <div className='mt-2'>Cần thu:<div style={{color: "#dc3545", display: "inline"}}> 5.000.000 VNĐ</div></div>
+        <div className='mt-2'>Đã thu<div style={{color: "#28a745", display: "inline"}}> 3.000.000 VNĐ</div></div>
+        <div className='mt-2'>
+          <ProgressBar now={now} label={`${now}%`} />
+        </div>
+        <div className='mt-2 row' style={{justifyContent: "space-between"}}>
+            <div>Đang theo dõi</div>
+            <button type="button" className="btn btn-tool" data-card-widget="collapse" onClick={showListClick}>
+              <i className={showListClick ? "fas fa-minus" : "fas fa-chevron-down"} />
+            </button>
+        </div>
+        {showListElement ? <List /> : null}
+      </div>
+    )
+  }
+
+  const BorrowStatistic = () => {
+
+    return (
+      <div>
+        <div>Còn nợ 200.000 VNĐ</div>
+        <div>Đang theo dõi</div>
+      </div>
+    )
+  }
+  
+  return (
+    <div className="container-fluid">
+      <div className="card">
+        <div className="card-body">
+          <div className="card card-danger">
+            <div className="card-header">
+              <h3 className="card-title">Theo dõi nợ</h3>
+              <div className="card-tools">
+                <button type="button" className="btn btn-tool" data-card-widget="collapse">
+                  <i className="fas fa-minus" />
+                </button>
+                <button type="button" className="btn btn-tool" data-card-widget="remove">
+                  <i className="fas fa-times" />
+                </button>
+              </div>
+            </div>
+            <div className="card-body">
+              <div className="row">
+                <div className="col-6">
+                  <button id="lend-button" type="button" className={lendButtonClass} onClick={lendButtonClick}>Cho vay</button>
+                </div>
+                <div className="col-6">
+                  <button id="borrow-button" type="button" className={borrowButtonClass} onClick={borrowButtonClick}>Còn nợ</button>
+                </div>
+              </div>
+              <div>
+                {showLendStatistic ? <LendStatistic /> : null}
+                {showBorrowStatistic ? <BorrowStatistic /> : null}
+              </div>
             </div>
           </div>
         </div>
@@ -214,6 +401,12 @@ const Statistic = () => {
           <div className="col-6">
             <IncomeGraph />
           </div>
+        </div>
+        <div className="row">
+          <div className="col-6">
+            <LendGraph />
+          </div>
+          <div></div>
         </div>
       </div>
     </div>
