@@ -88,7 +88,7 @@ const BudgetListingElement = ({ name, period, amount, remaining }) => {
           <div>{convertToVNDFormat(amount)} VNĐ</div>
         </div>
       </div>
-      <ProgressBar now={now | 0} label={`Today`} />
+      <ProgressBar now={now | 0} label={`${now}%`} />
       <div className="row" style={{justifyContent: "space-between"}}>
         <div className="col-6">Còn 11 ngày</div>
         <div className="col-6">{convertToVNDFormat(remaining)} VNĐ</div>

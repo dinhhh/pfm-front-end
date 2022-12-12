@@ -8,6 +8,7 @@ import ForgotPassword from './pages/forgotPassword';
 import AddRecord from './pages/income-expense/addRecord';
 import Statistic from './pages/income-expense/statistic';
 import BudgetPage from './pages/budget/budget';
+import Categories from './pages/income-expense-categories/categories';
 
 function App() {
     return (
@@ -25,6 +26,7 @@ function App() {
                     <Route path="/income-expense/add-record" component={AddRecord} />
                     <Route path="/income-expense/statistic" component={Statistic} />
                     <Route path="/budget/general" component={BudgetPage} />
+                    <Route path="/income-expense-categories/categories" component={Categories}/>
                     <Redirect to="/" />
                 </Switch>
             </Router>

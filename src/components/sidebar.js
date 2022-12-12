@@ -1,8 +1,10 @@
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
 
 const Sidebar = () => {
 
+  const CustomIcon = () => {
+    return <i className="fa-solid fa-circle-notch nav-icon" style={{fontSize: "1.0rem"}}/>;
+  }
   const showOrHideDetails = (liId) => {
     const liElement = document.getElementById(liId);
     if (liElement != null) {
@@ -59,43 +61,43 @@ const Sidebar = () => {
               <ul className="nav nav-treeview">
                 <li className="nav-item">
                   <a href="/income-expense/add-record" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
+                    <CustomIcon />
                     <p>Tạo mới</p>
                   </a>
                 </li>
                 <li className="nav-item">
                   <a href="/income-expense/statistic" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
+                    <CustomIcon />
                     <p>Thống kê</p>
                   </a>
                 </li>
                 <li className="nav-item">
                   <a href="#" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
+                    <CustomIcon />
                     <p>Kế hoạch</p>
                   </a>
                 </li>
                 <li className="nav-item">
                   <a href="/budget/general" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
+                    <CustomIcon />
                     <p>Hạn mức chi</p>
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a href="#" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
+                  <a href="/income-expense-categories/categories" className="nav-link">
+                    <CustomIcon />
                     <p>Hạng mục thu chi</p>
                   </a>
                 </li>
                 <li className="nav-item">
                   <a href="#" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
+                    <CustomIcon />
                     <p>Ghi chép định kì</p>
                   </a>
                 </li>
                 <li className="nav-item">
                   <a href="#" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
+                    <CustomIcon />
                     <p>Ghi chép mẫu</p>
                   </a>
                 </li>
@@ -113,13 +115,13 @@ const Sidebar = () => {
               <ul className="nav nav-treeview">
                 <li className="nav-item">
                   <a href="#" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
+                    <CustomIcon />
                     <p>Bảng cơ cấu tài sản</p>
                   </a>
                 </li>
                 <li className="nav-item">
                   <a href="#" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
+                    <CustomIcon />
                     <p>Báo cáo</p>
                   </a>
                 </li>
