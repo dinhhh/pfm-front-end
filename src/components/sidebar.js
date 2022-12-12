@@ -76,7 +76,7 @@ const Sidebar = () => {
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a href="#" className="nav-link">
+                  <a href="/budget/general" className="nav-link">
                     <i className="far fa-circle nav-icon" />
                     <p>Hạn mức chi</p>
                   </a>

@@ -7,6 +7,7 @@ import Register from './pages/register'
 import ForgotPassword from './pages/forgotPassword';
 import AddRecord from './pages/income-expense/addRecord';
 import Statistic from './pages/income-expense/statistic';
+import BudgetPage from './pages/budget/budget';
 
 function App() {
     return (
@@ -23,6 +24,7 @@ function App() {
                     <Route path="/forgot-password" component={ForgotPassword} />
                     <Route path="/income-expense/add-record" component={AddRecord} />
                     <Route path="/income-expense/statistic" component={Statistic} />
+                    <Route path="/budget/general" component={BudgetPage} />
                     <Redirect to="/" />
                 </Switch>
             </Router>

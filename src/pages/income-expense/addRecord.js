@@ -20,7 +20,7 @@ const NewExpenseForm = () => {
       </div>
 
       <div className="form-group">
-        <label>Nguồn tiền</label>
+        <label>Tài khoản</label>
         <select class="form-control mb-3">
           <option>Ví 1</option>
           <option>Ví 2</option>
@@ -100,7 +100,6 @@ const AddRecordForm = () => {
   const [selected, setSelected] = useState("expense");
 
   const selectType = (e) => {
-    console.log(e.target.value);
     setSelected(e.target.value);
   }
 
@@ -116,7 +115,7 @@ const AddRecordForm = () => {
               <option value={"borrow"}>Cho vay</option>
             </select>
             <div className="form-group">
-              <label htmlFor="amount">Số tiền</label>
+              <label htmlFor="amount">Số tiền (đ)</label>
               <input type="amount" className="form-control" id="amount" placeholder="Số tiền" required />
             </div>
             <div className="form-group">

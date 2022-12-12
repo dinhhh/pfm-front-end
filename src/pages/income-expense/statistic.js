@@ -320,6 +320,7 @@ const LendGraph = () => {
       setShowListElement( !showListElement );
     }
     const now = 37.5;
+    
     return (
       <div>
         <div className='mt-2'>Tổng cho vay:<div style={{fontWeight: "bold", display: "inline"}}> 8.000.000 VNĐ</div></div>
@@ -328,10 +329,10 @@ const LendGraph = () => {
         <div className='mt-2'>
           <ProgressBar now={now} label={`${now}%`} />
         </div>
-        <div className='mt-2 row' style={{justifyContent: "space-between"}}>
-            <div>Đang theo dõi</div>
+        <div className='mt-2 row' style={{justifyContent: "center"}}>
+            <div><h5>Đang theo dõi</h5></div>
             <button type="button" className="btn btn-tool" data-card-widget="collapse" onClick={showListClick}>
-              <i className={showListClick ? "fas fa-minus" : "fas fa-chevron-down"} />
+              <i className={showListClick ? "fas fa-minus" : "fas fa-plus"} />
             </button>
         </div>
         {showListElement ? <List /> : null}
@@ -343,8 +344,7 @@ const LendGraph = () => {
 
     return (
       <div>
-        <div>Còn nợ 200.000 VNĐ</div>
-        <div>Đang theo dõi</div>
+        <div>Bạn không có khoản nợ nào</div>
       </div>
     )
   }
