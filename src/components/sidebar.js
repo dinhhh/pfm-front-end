@@ -101,6 +101,12 @@ const Sidebar = () => {
                     <p>Ghi chép mẫu</p>
                   </a>
                 </li>
+                <li className="nav-item">
+                  <a href="#" className="nav-link">
+                    <CustomIcon />
+                    <p>Quản lý tài khoản</p>
+                  </a>
+                </li>
               </ul>
             </li>
 

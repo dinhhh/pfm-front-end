@@ -45,6 +45,24 @@ const DropDownSelectBox = ({ setShowChart, backColor }) => {
   );
 }
 
+const SelectPeriodButton = ({ setShowChart }) => {
+  const [localShowChart, setLocalShowChart] = useState({month: true, quarter: false, year: false});
+  const handleChange = ( value ) => {
+    var newShowChart = {month: false, quarter: false, year: false};
+    newShowChart[value] = true;
+    setShowChart(newShowChart);
+    setLocalShowChart(newShowChart);
+  } 
+
+  return (
+    <div className="row" >
+      <div className="col-4"><button type='button' onClick={() => handleChange("month")} className={localShowChart["month"] ? "btn btn-block btn-success" : "btn btn-block btn-default"}>Theo tháng</button></div>
+      <div className="col-4"><button type='button' onClick={() => handleChange("quarter")} className={localShowChart["quarter"] ? "btn btn-block btn-success" : "btn btn-block btn-default"}>Theo quý</button></div>
+      <div className="col-4 mb-3"><button type='button' onClick={() => handleChange("year")} className={localShowChart["year"] ? "btn btn-block btn-success" : "btn btn-block btn-default"}>Theo năm</button></div>
+    </div>
+  );
+}
+
 const GeneralStatistic = () => {
   return (
     <div className="container-fluid">
@@ -102,7 +120,6 @@ const ExpenseVsIncomeGraph = () => {
           <div className="card card-success">
             <div className="card-header">
               <h3 className="card-title">Tình hình thu chi</h3>
-              <DropDownSelectBox setShowChart={setShowChart} backColor={"#28a745"} />
               <div className="card-tools">
                 <button type="button" className="btn btn-tool" data-card-widget="collapse">
                   <i className="fas fa-minus" />
@@ -113,6 +130,7 @@ const ExpenseVsIncomeGraph = () => {
               </div>
             </div>
             <div className="card-body">
+              <SelectPeriodButton setShowChart={setShowChart} />
               {showChart["month"] ? monthChart : null}
               {showChart["quarter"] ? quarterChart : null}
               {showChart["year"] ? yearChart : null}
@@ -143,7 +161,6 @@ const ExpenseGraph = () => {
           <div className="card card-success">
             <div className="card-header">
               <h3 className="card-title">Tình hình chi</h3>
-              <DropDownSelectBox setShowChart={setShowChart} backColor={"#28a745"} />
               <div className="card-tools">
                 <button type="button" className="btn btn-tool" data-card-widget="collapse">
                   <i className="fas fa-minus" />
@@ -154,6 +171,7 @@ const ExpenseGraph = () => {
               </div>
             </div>
             <div className="card-body">
+              <SelectPeriodButton setShowChart={setShowChart} />
               {showChart["month"] ? monthChart : null}
               {showChart["quarter"] ? quarterChart : null}
               {showChart["year"] ? yearChart : null}
@@ -184,7 +202,6 @@ const IncomeGraph = () => {
           <div className="card card-success">
             <div className="card-header">
               <h3 className="card-title">Tình hình thu</h3>
-              <DropDownSelectBox setShowChart={setShowChart} backColor={"#28a745"} />
               <div className="card-tools">
                 <button type="button" className="btn btn-tool" data-card-widget="collapse">
                   <i className="fas fa-minus" />
@@ -195,6 +212,7 @@ const IncomeGraph = () => {
               </div>
             </div>
             <div className="card-body">
+              <SelectPeriodButton setShowChart={setShowChart} />
               {showChart["month"] ? monthChart : null}
               {showChart["quarter"] ? quarterChart : null}
               {showChart["year"] ? yearChart : null}
@@ -207,7 +225,7 @@ const IncomeGraph = () => {
 }
 
 const LendGraph = () => {
-  const primaryButtonClass = "btn btn-block btn-primary";
+  const primaryButtonClass = "btn btn-block btn-danger";
   const defaultButtonClass = "btn btn-block btn-default";
 
   const [lendButtonClass, setLendButtonClass] = useState(primaryButtonClass);
@@ -244,73 +262,73 @@ const LendGraph = () => {
             <div className="ms-2 me-auto">
               <div className="fw-bold">Việt Anh</div>
             </div>
-            <Badge bg="primary" pill>2.000.000</Badge>
+            <Badge bg="danger" pill>2.000.000</Badge>
           </ListGroup.Item>
           <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
             <div className="ms-2 me-auto">
               <div className="fw-bold">Hoàng Long</div>
             </div>
-            <Badge bg="primary" pill>800.000</Badge>
+            <Badge bg="danger" pill>800.000</Badge>
           </ListGroup.Item>
           <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
             <div className="ms-2 me-auto">
               <div className="fw-bold">Duy Anh</div>
             </div>
-            <Badge bg="primary" pill>200.000</Badge>
+            <Badge bg="danger" pill>200.000</Badge>
           </ListGroup.Item>
           <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
             <div className="ms-2 me-auto">
               <div className="fw-bold">Việt Anh</div>
             </div>
-            <Badge bg="primary" pill>2.000.000</Badge>
+            <Badge bg="danger" pill>2.000.000</Badge>
           </ListGroup.Item>
           <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
             <div className="ms-2 me-auto">
               <div className="fw-bold">Hoàng Long</div>
             </div>
-            <Badge bg="primary" pill>800.000</Badge>
+            <Badge bg="danger" pill>800.000</Badge>
           </ListGroup.Item>
           <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
             <div className="ms-2 me-auto">
               <div className="fw-bold">Duy Anh</div>
             </div>
-            <Badge bg="primary" pill>200.000</Badge>
+            <Badge bg="danger" pill>200.000</Badge>
           </ListGroup.Item>
           <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
             <div className="ms-2 me-auto">
               <div className="fw-bold">Việt Anh</div>
             </div>
-            <Badge bg="primary" pill>2.000.000</Badge>
+            <Badge bg="danger" pill>2.000.000</Badge>
           </ListGroup.Item>
           <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
             <div className="ms-2 me-auto">
               <div className="fw-bold">Hoàng Long</div>
             </div>
-            <Badge bg="primary" pill>800.000</Badge>
+            <Badge bg="danger" pill>800.000</Badge>
           </ListGroup.Item>
           <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
             <div className="ms-2 me-auto">
               <div className="fw-bold">Duy Anh</div>
             </div>
-            <Badge bg="primary" pill>200.000</Badge>
+            <Badge bg="danger" pill>200.000</Badge>
           </ListGroup.Item>
           <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
             <div className="ms-2 me-auto">
               <div className="fw-bold">Việt Anh</div>
             </div>
-            <Badge bg="primary" pill>2.000.000</Badge>
+            <Badge bg="danger" pill>2.000.000</Badge>
           </ListGroup.Item>
           <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
             <div className="ms-2 me-auto">
               <div className="fw-bold">Hoàng Long</div>
             </div>
-            <Badge bg="primary" pill>800.000</Badge>
+            <Badge bg="danger" pill>800.000</Badge>
           </ListGroup.Item>
           <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
             <div className="ms-2 me-auto">
               <div className="fw-bold">Duy Anh</div>
             </div>
-            <Badge bg="primary" pill>200.000</Badge>
+            <Badge bg="danger" pill>200.000</Badge>
           </ListGroup.Item>
         </ListGroup>
       );
