@@ -96,7 +96,7 @@ const NewBorrowForm = () => {
 }
 
 const AddRecordForm = () => {
-  const [date, onDateChange] = useState(new Date());
+  const [date, setDate] = useState(new Date());
   const [selected, setSelected] = useState("expense");
 
   const selectType = (e) => {
@@ -129,7 +129,7 @@ const AddRecordForm = () => {
             </div>
             <div className="form-group">
               <label>Thời gian</label>
-              <DateTimePicker format="h:mm:ss dd-MM-y a" onChange={onDateChange} value={date} className="ml-3" />
+              <DateTimePicker format="h:mm:ss dd-MM-y a" onChange={setDate} value={date} className="ml-3" />
             </div>
             <div className="form-group">
               <label htmlFor="amount">Mô tả</label>
@@ -166,7 +166,7 @@ const AddRecord = () => {
     $('.swalDefaultSuccess').click(function () {
       Toast.fire({
         icon: 'success',
-        title: 'Lưu bản ghi thành công'
+        title: 'Lưu thành công'
       })
     });
   }));

@@ -90,7 +90,7 @@ const Sidebar = () => {
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a href="#" className="nav-link">
+                  <a href="/recurring-transactions/transactions" className="nav-link">
                     <CustomIcon />
                     <p>Ghi chép định kì</p>
                   </a>

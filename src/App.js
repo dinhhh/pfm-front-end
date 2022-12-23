@@ -9,6 +9,7 @@ import AddRecord from './pages/income-expense/addRecord';
 import Statistic from './pages/income-expense/statistic';
 import BudgetPage from './pages/budget/budget';
 import Categories from './pages/income-expense-categories/categories';
+import RecurringTransactions from './pages/recurring-transactions/recurringTransactions';
 
 function App() {
     return (
@@ -27,6 +28,7 @@ function App() {
                     <Route path="/income-expense/statistic" component={Statistic} />
                     <Route path="/budget/general" component={BudgetPage} />
                     <Route path="/income-expense-categories/categories" component={Categories}/>
+                    <Route path="/recurring-transactions/transactions" component={RecurringTransactions} />
                     <Redirect to="/" />
                 </Switch>
             </Router>
