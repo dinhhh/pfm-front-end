@@ -31,7 +31,7 @@ const Register = () => {
     };
 
     setLoading(true);
-    const response = await postApi(API_PATH.SIGN_IN, requestBody);
+    const response = await postApi(API_PATH.SIGN_UP, requestBody);
     setLoading(false);
 
     if (response.ok) {
