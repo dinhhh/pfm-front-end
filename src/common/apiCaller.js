@@ -1,7 +1,8 @@
+import { getToken } from "./localStorage";
 import { API_URL } from "../config/api";
 import { warningToast } from "./toast";
 
-const LOG_TAG = "[Api caller utils]"
+const LOG_TAG = "[Api caller utils]";
 
 export const AUTH_PREFIX = "Bearer ";
 
@@ -28,15 +29,27 @@ export const postApi = async (path, requestBody = {}) => {
   console.log("Request options: ", requestOptions);
 
   const response = await fetch(url, requestOptions);
-  // if (!response.ok) {
-  //   warningToast("Có lỗi xảy ra. Vui lòng thử lại sau");
-  // }
-  // try {
-  //   const myJson = await response.json();
-  //   return myJson;
-  // } catch {
-  //   return "";
-  // }
+
+  return response;
+}
+
+export const postApiAuth = async (path, requestBody = {}) => {
+  const token = getToken();
+  const url = API_URL + path;
+
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      'Content-Type': "application/json",
+      'Accept': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Authorization': token,
+    },
+    body: JSON.stringify(requestBody)
+  };
+  console.log("Request options: ", requestOptions);
+
+  const response = await fetch(url, requestOptions);
 
   return response;
 }

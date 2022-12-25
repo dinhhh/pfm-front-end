@@ -102,7 +102,7 @@ const Sidebar = () => {
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a href="#" className="nav-link">
+                  <a href="/wallet/management" className="nav-link">
                     <CustomIcon />
                     <p>Quản lý tài khoản</p>
                   </a>

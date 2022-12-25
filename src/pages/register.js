@@ -14,7 +14,7 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
 
   const register = async () => {
-    if (!(fullName && email && pw && rePw)) {
+    if ( !(fullName && email && pw && rePw) ) {
       warningToast("Nhập thiếu thông tin");
       return;
     }
@@ -45,8 +45,7 @@ const Register = () => {
     <div>
       {
         loading ?
-          <LoadingComponent loading={loading} />
-          :
+          <LoadingComponent loading={loading} /> :
           <div className="hold-transition login-page">
             <div className="register-box">
               <div className="card">
