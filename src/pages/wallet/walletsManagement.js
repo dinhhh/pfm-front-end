@@ -98,7 +98,7 @@ const WalletsManagement = () => {
     }
 
     fetchData();
-  }, []);
+  }, [isNewWalletFormOpen]);
 
   return (
     <div>
