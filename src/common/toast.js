@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 
-export const successToast = ( title = "Lưu thanh công" ) => {
+export const successToast = ( title = "Lưu thành công" ) => {
   var Toast = Swal.mixin({
     toast: true,
     position: 'top-end',

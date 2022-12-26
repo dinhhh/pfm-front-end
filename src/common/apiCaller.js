@@ -14,6 +14,26 @@ export const getApi = async (path) => {
   return myJson;
 }
 
+export const getApiAuth = async ( path ) => {
+  const token = getToken();
+  const url = API_URL + path;
+
+  const requestOptions = {
+    method: 'GET',
+    headers: {
+      'Content-Type': "application/json",
+      'Accept': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Authorization': token,
+    }
+  };
+  console.log("Request options: ", requestOptions);
+
+  const response = await fetch(url, requestOptions);
+
+  return response;
+}
+
 export const postApi = async (path, requestBody = {}) => {
   const url = API_URL + path;
 
