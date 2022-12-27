@@ -8,10 +8,10 @@ import { API_PATH } from "../../config/api";
 import { OPERATION_TYPE_CODE } from "../../config/constant";
 import { successToast, warningToast } from "../../common/toast";
 
-const NewExpenseForm = ({ wallets, expenseCategories, setWalletNo, setCategoryNo }) => {
+const NewExpenseIncomeForm = ({ wallets, categories, setWalletNo, setCategoryNo }) => {
 
   var options = [];
-  for (var parent of expenseCategories) {
+  for (var parent of categories) {
     var parentCategory = {
       "categoryNo": parent["parentCategoryNo"],
       "categoryName": parent["parentCategoryName"],
@@ -204,8 +204,8 @@ const AddRecordForm = ({ wallets, expenseCategories, incomeCategories }) => {
               <input type="amount" className="form-control" id="amount" placeholder="Mô tả" onChange={(e) => setDescription(e.target.value)} />
             </div>
 
-            {selected === "expense" ? <NewExpenseForm wallets={wallets} expenseCategories={expenseCategories} setWalletNo={setWalletNo} setCategoryNo={setCategoryNo} /> : null}
-            {selected === "income" ? <NewIncomeForm /> : null}
+            {selected === "expense" ? <NewExpenseIncomeForm wallets={wallets} categories={expenseCategories} setWalletNo={setWalletNo} setCategoryNo={setCategoryNo} /> : null}
+            {selected === "income" ? <NewExpenseIncomeForm wallets={wallets} categories={incomeCategories} setWalletNo={setWalletNo} setCategoryNo={setCategoryNo} /> : null}
             {selected === "lend" ? <NewLendForm /> : null}
             {selected === "borrow" ? <NewBorrowForm /> : null}
 
@@ -224,6 +224,7 @@ const AddRecord = () => {
 
   const [wallets, setWallets] = useState([]);
   const [expenseCategories, setExpenseCategories] = useState([]);
+  const [incomeCategories, setIncomeCategories] = useState([]);
 
   useEffect(() => {
 
@@ -238,6 +239,12 @@ const AddRecord = () => {
       if (expenseResponse.ok) {
         const body = await expenseResponse.json();
         setExpenseCategories(body);
+      }
+
+      const incomeResponse = await getApiAuth(API_PATH.GET_ALL_INCOME_CATEGORIES);
+      if (incomeResponse.ok) {
+        const body = await incomeResponse.json();
+        setIncomeCategories(body);
       }
     }
 
@@ -267,7 +274,7 @@ const AddRecord = () => {
             </div>
           </div>
         </section>
-        <AddRecordForm wallets={wallets} expenseCategories={expenseCategories} />
+        <AddRecordForm wallets={wallets} expenseCategories={expenseCategories} incomeCategories={incomeCategories} />
       </div>
 
     </div>
