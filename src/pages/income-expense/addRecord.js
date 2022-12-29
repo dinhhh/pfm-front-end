@@ -1,3 +1,5 @@
+import { RequireStar } from "../../components/annotation";
+import { buildCategory, convertDateToString } from "../../common/utils";
 import { getApiAuth, postApiAuth } from "../../common/apiCaller";
 import { useEffect } from "react";
 import React, { useState } from "react";
@@ -10,31 +12,12 @@ import { successToast, warningToast } from "../../common/toast";
 
 const NewExpenseIncomeForm = ({ wallets, categories, setWalletNo, setCategoryNo }) => {
 
-  var options = [];
-  for (var parent of categories) {
-    var parentCategory = {
-      "categoryNo": parent["parentCategoryNo"],
-      "categoryName": parent["parentCategoryName"],
-      "isParent": true
-      };
-      options.push(parentCategory);
-  
-      if (parent["subCategories"].length !== 0) {
-        var sub = parent["subCategories"].map((c, i) => {
-          return {
-            "categoryNo": c["categoryNo"],
-            "categoryName": c["name"],
-            "isParent": false,
-          };
-        });
-        options.push(...sub);
-      }
-  }
+  var options = buildCategory(categories);
 
   return (
     <div>
       <div className="form-group">
-        <label>Chọn hạng mục</label>
+        <label>Chọn hạng mục <RequireStar /></label>
         <select class="form-control mb-3" onChange={(e) => setCategoryNo(e.target.value)}>
         <option value={null} selected={true}></option>
           {
@@ -44,35 +27,12 @@ const NewExpenseIncomeForm = ({ wallets, categories, setWalletNo, setCategoryNo 
       </div>
 
       <div className="form-group">
-        <label>Tài khoản</label>
+        <label>Tài khoản <RequireStar /></label>
         <select class="form-control mb-3" onChange={(e) => setWalletNo(e.target.value)}>
         <option value={null} selected={true}></option>
           {
             wallets.length !== 0 && wallets.map((object, index) => <option value={object["walletNo"]}>{object["name"]}</option>)
           }
-        </select>
-      </div>
-    </div>
-  );
-}
-
-const NewIncomeForm = () => {
-  return (
-    <div>
-      <div className="form-group">
-        <label>Chọn hạng mục</label>
-        <select class="form-control mb-3">
-          <option>Tiền lương</option>
-          <option>Tiền thưởng</option>
-          <option>Khác</option>
-        </select>
-      </div>
-
-      <div className="form-group">
-        <label>Nguồn tiền</label>
-        <select class="form-control mb-3">
-          <option>Ví 1</option>
-          <option>Ví 2</option>
         </select>
       </div>
     </div>
@@ -153,10 +113,8 @@ const AddRecordForm = ({ wallets, expenseCategories, incomeCategories }) => {
         break;
     }
 
-    const dayDate = date.getDay() > 10 ? date.getDay().toString() : "0" + date.getDay().toString(); 
-    
     const requestBody = {
-      "createdOn": date.getFullYear().toString() + "-" + date.getMonth().toString() + "-" + dayDate,
+      "createdOn": convertDateToString(date),
       "amount": parseInt(amount, 10),
       "description": description,
       "walletNo": walletNo,
@@ -183,7 +141,7 @@ const AddRecordForm = ({ wallets, expenseCategories, incomeCategories }) => {
               <option value={"borrow"}>Cho vay</option>
             </select>
             <div className="form-group">
-              <label htmlFor="amount">Số tiền (đ)</label>
+              <label htmlFor="amount">Số tiền (đ) <RequireStar /></label>
               <input type="number" className="form-control" id="amount" placeholder="Số tiền" required onChange={(e) => setAmount(e.target.value)} />
             </div>
             <div className="form-group">
@@ -196,7 +154,7 @@ const AddRecordForm = ({ wallets, expenseCategories, incomeCategories }) => {
               </div>
             </div>
             <div className="form-group">
-              <label>Thời gian</label>
+              <label>Thời gian <RequireStar /></label>
               <DateTimePicker format="h:mm:ss dd-MM-y a" onChange={setDate} value={date} className="ml-3" />
             </div>
             <div className="form-group">

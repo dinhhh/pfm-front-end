@@ -8,5 +8,7 @@ export const API_PATH = {
   NEW_CATEGORY: "/category/new",
   GET_ALL_EXPENSE_CATEGORIES: "/category/get-all-expense",
   GET_ALL_INCOME_CATEGORIES: "/category/get-all-income",
-  NEW_EXPENSE_INCOME: "/expense-income/new"
+  NEW_EXPENSE_INCOME: "/expense-income/new",
+  NEW_LIMIT_EXPENSE: "/limit-expense/new",
+  GET_ALL_LIMIT_EXPENSE: "/limit-expense/get-all"
 }

@@ -71,12 +71,12 @@ const Sidebar = () => {
                     <p>Thống kê</p>
                   </a>
                 </li>
-                <li className="nav-item">
+                {/* <li className="nav-item">
                   <a href="#" className="nav-link">
                     <CustomIcon />
                     <p>Kế hoạch</p>
                   </a>
-                </li>
+                </li> */}
                 <li className="nav-item">
                   <a href="/budget/general" className="nav-link">
                     <CustomIcon />
@@ -95,12 +95,12 @@ const Sidebar = () => {
                     <p>Ghi chép định kì</p>
                   </a>
                 </li>
-                <li className="nav-item">
+                {/* <li className="nav-item">
                   <a href="#" className="nav-link">
                     <CustomIcon />
                     <p>Ghi chép mẫu</p>
                   </a>
-                </li>
+                </li> */}
                 <li className="nav-item">
                   <a href="/wallet/management" className="nav-link">
                     <CustomIcon />
