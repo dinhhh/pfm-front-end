@@ -73,3 +73,45 @@ export const postApiAuth = async (path, requestBody = {}) => {
 
   return response;
 }
+
+export const putApiAuth = async (path, requestBody = {}) => {
+  const token = getToken();
+  const url = API_URL + path;
+
+  const requestOptions = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': "application/json",
+      'Accept': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Authorization': token,
+    },
+    body: JSON.stringify(requestBody)
+  };
+  console.log("Request options: ", requestOptions);
+
+  const response = await fetch(url, requestOptions);
+
+  return response;
+}
+
+export const deleteApiAuth = async (path, requestBody = {}) => {
+  const token = getToken();
+  const url = API_URL + path;
+
+  const requestOptions = {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': "application/json",
+      'Accept': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Authorization': token,
+    },
+    body: JSON.stringify(requestBody)
+  };
+  console.log("Request options: ", requestOptions);
+
+  const response = await fetch(url, requestOptions);
+
+  return response;
+}
