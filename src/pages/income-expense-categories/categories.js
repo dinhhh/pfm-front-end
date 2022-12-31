@@ -8,7 +8,6 @@ import Modal from "../../components/modal";
 import { AddButton } from "../../components/button";
 import Header from "../../components/header";
 import Sidebar from "../../components/sidebar";
-import { isContentEditable } from "@testing-library/user-event/dist/utils";
 
 const Form = ({ parentCategoryJson, operationType }) => {
   console.log("Expense form: ", parentCategoryJson)

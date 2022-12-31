@@ -12,6 +12,7 @@ export const API_PATH = {
   DELETE_CATEGORY: "/category/delete",
   NEW_EXPENSE_INCOME: "/expense-income/new",
   NEW_LIMIT_EXPENSE: "/limit-expense/new",
+  DELETE_LIMIT_EXPENSE: "/limit-expense/delete",
   GET_ALL_LIMIT_EXPENSE: "/limit-expense/get-all",
   NEW_RECURRING_TRANSACTION: "/recurring-transaction/new",
   GET_ALL_RECURRING_TRANSACTION: "/recurring-transaction/get-all",

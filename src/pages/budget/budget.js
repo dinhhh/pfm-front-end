@@ -7,7 +7,7 @@ import Header from "../../components/header";
 import Sidebar from "../../components/sidebar";
 import { useEffect, useState } from "react";
 import { convertVNDToInt, convertToVNDFormat } from "../../common/stringFormat";
-import { getApiAuth, postApiAuth } from "../../common/apiCaller";
+import { deleteApiAuth, getApiAuth, postApiAuth } from "../../common/apiCaller";
 import { API_PATH } from "../../config/api";
 import { buildCategory, convertDateToString } from "../../common/utils";
 import { successToast, warningToast } from "../../common/toast";
@@ -95,36 +95,49 @@ const CreateBudget = ({ categoies, wallets }) => {
             <DateTimePicker format="dd-MM-y" onChange={setEndDate} value={endDate} className="ml-3" />
           </div>
         </div>
-
-        {/* TODO: Consider to do this function */}
-        {/* <div className="form-group">
-            <label>Dồn sang kì sau</label>
-            <input type="checkbox" value="Bike" className="ml-2" />
-          </div> */}
-
         <button type="submit" className="btn btn-primary" onClick={submitHandle}>Lưu</button>
       </div>
     </div>
   );
 }
 
-const BudgetListingElement = ({ name, period, amount, remaining, dayLeft, walletName }) => {
+const BudgetListingElement = ({ budgetNo, name, period, amount, remaining, dayLeft, walletName }) => {
   const now = remaining / amount * 100;
+
+  const deleteBudget = async () => {
+    const requestBody = {
+      "limitExpenseNo": budgetNo
+    }
+    const response = await deleteApiAuth(API_PATH.DELETE_LIMIT_EXPENSE, requestBody);
+    if (response.ok) {
+      successToast("Xóa thành công");
+      window.location.reload();
+    } else {
+      warningToast("Xóa thất bại. Thử lại sau")
+    }
+  }
+
   return (
     <div className="col">
       <div className="row" style={{ justifyContent: "space-between" }}>
-        <div className="col-6">
-          <div>{name} - {walletName}</div>
+        <div className="col-4">
+          <div><b>{name}</b> - {walletName}</div>
           <div>{period}</div>
         </div>
-        <div className="col-6">
+        <div className="col-4">
           <div>{convertToVNDFormat(amount)} VNĐ</div>
+        </div>
+        <div className="col-4">
+          <div>
+            <i className="fas fa-trash" onClick={deleteBudget} />
+          </div>
         </div>
       </div>
       <ProgressBar now={now | 0} label={`${now}%`} />
       <div className="row" style={{ justifyContent: "space-between" }}>
-        <div className="col-6">Còn {dayLeft} ngày</div>
-        <div className="col-6">{convertToVNDFormat(remaining)} VNĐ</div>
+        <div className="col-4">Còn lại: {dayLeft} ngày</div>
+        <div className="col-4">{convertToVNDFormat(remaining)} VNĐ</div>
+        <div className="col-4"></div>
       </div>
 
       <hr />
@@ -137,13 +150,14 @@ const BudgetListing = ({ btnClickHandle, limitExpenseList }) => {
   if (limitExpenseList != null || limitExpenseList.length !== 0) {
     for (var i = 0; i < limitExpenseList.length; i++) {
       const object = limitExpenseList[i];
-      list.push(<BudgetListingElement 
-        name={object["name"]} 
-        period={object["startDate"] + " -> " + object["endDate"]} 
-        amount={object["amount"]} 
-        remaining={object["remainingAmount"]} 
-        dayLeft={object["dayLeft"]} 
-        walletName={object["walletName"]} />);
+      list.push(<BudgetListingElement
+        name={object["name"]}
+        period={object["startDate"] + " -> " + object["endDate"]}
+        amount={object["amount"]}
+        remaining={object["remainingAmount"]}
+        dayLeft={object["dayLeft"]}
+        walletName={object["walletName"]}
+        budgetNo={object["limitExpenseNo"]} />);
     }
   }
 
