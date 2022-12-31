@@ -101,7 +101,7 @@ const TransactionElement = ({ recurringTransactionNo, startDate, endDate, operat
     const response = await putApiAuth(API_PATH.EDIT_RECURRING_TRANSACTION, requestBody);
     if (response.ok) {
       successToast();
-      setReload();
+      window.location.reload();
     } else {
       warningToast();
     }
@@ -114,7 +114,7 @@ const TransactionElement = ({ recurringTransactionNo, startDate, endDate, operat
     const response = await deleteApiAuth(API_PATH.DELETE_RECURRING_TRANSACTION, requestBody);
     if (response.ok) {
       successToast("Xóa thành công");
-      setReload();
+      window.location.reload();
     } else {
       warningToast("Xóa thất bại. Thử lại sau");
     }
@@ -175,7 +175,7 @@ const TransactionElement = ({ recurringTransactionNo, startDate, endDate, operat
   );
 }
 
-const TransactionListing = ({ btnHandle, allTransactions, setReload }) => {
+const TransactionListing = ({ btnHandle, allTransactions }) => {
   const dayTransactionList = allTransactions.filter((transaction, index) => transaction["periodCode"] === 0);
   const weekTransactionList = allTransactions.filter((transaction, index) => transaction["periodCode"] === 1);
   const monthTransactionList = allTransactions.filter((transaction, index) => transaction["periodCode"] === 2);
@@ -195,7 +195,7 @@ const TransactionListing = ({ btnHandle, allTransactions, setReload }) => {
           <h5>Hàng ngày</h5>
           <i className={showDayList ? "fas fa-minus" : "fas fa-plus"} />
         </div>
-        {dayTransactionList.length !== 0 && showDayList && dayTransactionList.map((object, index) => <TransactionElement recurringTransactionNo={object["recurringTransactionNo"]} startDate={object["startDate"]} endDate={object["endDate"]} operationCode={object["operationCode"]} description={object["description"]} name={object["name"]} amount={object["amount"]} setReload={setReload}/>)}
+        {dayTransactionList.length !== 0 && showDayList && dayTransactionList.map((object, index) => <TransactionElement recurringTransactionNo={object["recurringTransactionNo"]} startDate={object["startDate"]} endDate={object["endDate"]} operationCode={object["operationCode"]} description={object["description"]} name={object["name"]} amount={object["amount"]} />)}
       </div>
       <hr />
       <div className="px-3">
@@ -203,7 +203,7 @@ const TransactionListing = ({ btnHandle, allTransactions, setReload }) => {
           <h5>Hàng tuần</h5>
           <i className={showWeekList ? "fas fa-minus" : "fas fa-plus"} />
         </div>
-        {weekTransactionList.length !== 0 && showWeekList && weekTransactionList.map((object, index) => <TransactionElement recurringTransactionNo={object["recurringTransactionNo"]} startDate={object["startDate"]} endDate={object["endDate"]} operationCode={object["operationCode"]} description={object["description"]} name={object["name"]} amount={object["amount"]} setReload={setReload}/>)}
+        {weekTransactionList.length !== 0 && showWeekList && weekTransactionList.map((object, index) => <TransactionElement recurringTransactionNo={object["recurringTransactionNo"]} startDate={object["startDate"]} endDate={object["endDate"]} operationCode={object["operationCode"]} description={object["description"]} name={object["name"]} amount={object["amount"]} />)}
       </div>
       <hr />
       <div className="px-3">
@@ -211,7 +211,7 @@ const TransactionListing = ({ btnHandle, allTransactions, setReload }) => {
           <h5>Hàng tháng</h5>
           <i className={showMonthList ? "fas fa-minus" : "fas fa-plus"} />
         </div>
-        {monthTransactionList.length !== 0 && showMonthList && monthTransactionList.map((object, index) => <TransactionElement recurringTransactionNo={object["recurringTransactionNo"]} startDate={object["startDate"]} endDate={object["endDate"]} operationCode={object["operationCode"]} description={object["description"]} name={object["name"]} amount={object["amount"]} setReload={setReload}/>)}
+        {monthTransactionList.length !== 0 && showMonthList && monthTransactionList.map((object, index) => <TransactionElement recurringTransactionNo={object["recurringTransactionNo"]} startDate={object["startDate"]} endDate={object["endDate"]} operationCode={object["operationCode"]} description={object["description"]} name={object["name"]} amount={object["amount"]} />)}
       </div>
       <hr />
       <div className="px-3">
@@ -219,7 +219,7 @@ const TransactionListing = ({ btnHandle, allTransactions, setReload }) => {
           <h5>Hàng quý</h5>
           <i className={showQuarterList ? "fas fa-minus" : "fas fa-plus"} />
         </div>
-        {quarterTransactionList.length !== 0 && showQuarterList && quarterTransactionList.map((object, index) => <TransactionElement recurringTransactionNo={object["recurringTransactionNo"]} startDate={object["startDate"]} endDate={object["endDate"]} operationCode={object["operationCode"]} description={object["description"]} name={object["name"]} amount={object["amount"]} setReload={setReload}/>)}
+        {quarterTransactionList.length !== 0 && showQuarterList && quarterTransactionList.map((object, index) => <TransactionElement recurringTransactionNo={object["recurringTransactionNo"]} startDate={object["startDate"]} endDate={object["endDate"]} operationCode={object["operationCode"]} description={object["description"]} name={object["name"]} amount={object["amount"]} />)}
       </div>
       <hr />
       <div className="px-3">
@@ -227,7 +227,7 @@ const TransactionListing = ({ btnHandle, allTransactions, setReload }) => {
           <h5>Hàng năm</h5>
           <i className={showYearList ? "fas fa-minus" : "fas fa-plus"} />
         </div>
-        {yearTransactionList.length !== 0 && showYearList && yearTransactionList.map((object, index) => <TransactionElement recurringTransactionNo={object["recurringTransactionNo"]} startDate={object["startDate"]} endDate={object["endDate"]} operationCode={object["operationCode"]} description={object["description"]} name={object["name"]} amount={object["amount"]} setReload={setReload}/>)}
+        {yearTransactionList.length !== 0 && showYearList && yearTransactionList.map((object, index) => <TransactionElement recurringTransactionNo={object["recurringTransactionNo"]} startDate={object["startDate"]} endDate={object["endDate"]} operationCode={object["operationCode"]} description={object["description"]} name={object["name"]} amount={object["amount"]} />)}
       </div>
       <hr />
     </div>
@@ -246,7 +246,6 @@ const RecurringTransactions = () => {
 
   const [isShowCreateForm, setShowCreateForm] = useState(true);
   const [allTransactions, setTransactions] = useState([]);
-  const [needReload, setReload] = useState(false); // not work, consider remove latter
   const createForm = <AddTransactions />;
 
   useEffect(() => {
@@ -274,7 +273,7 @@ const RecurringTransactions = () => {
             <div className="col">
               <div className="card">
                 <div className="card-body">
-                  <TransactionListing btnHandle={() => setShowCreateForm(!isShowCreateForm)} allTransactions={allTransactions} setReload={() => setReload(!needReload)} />
+                  <TransactionListing btnHandle={() => setShowCreateForm(!isShowCreateForm)} allTransactions={allTransactions} />
                 </div>
               </div>
             </div>

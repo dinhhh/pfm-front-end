@@ -2,12 +2,13 @@ import { useEffect } from "react";
 import { API_PATH } from "../../config/api";
 import { OPERATION_TYPE_CODE } from "../../config/constant";
 import { warningToast, successToast } from "../../common/toast";
-import { getApiAuth, postApiAuth } from "../../common/apiCaller";
+import { deleteApiAuth, getApiAuth, postApiAuth, putApiAuth } from "../../common/apiCaller";
 import { useState } from "react";
 import Modal from "../../components/modal";
 import { AddButton } from "../../components/button";
 import Header from "../../components/header";
 import Sidebar from "../../components/sidebar";
+import { isContentEditable } from "@testing-library/user-event/dist/utils";
 
 const Form = ({ parentCategoryJson, operationType }) => {
   console.log("Expense form: ", parentCategoryJson)
@@ -59,36 +60,97 @@ const Form = ({ parentCategoryJson, operationType }) => {
   );
 }
 
-const ParentElement = ({ parentCategoryName, parentCategoryDescription, subCategories }) => {
+const ParentElement = ({ parentCategoryNo, parentCategoryName, parentCategoryDescription, subCategories }) => {
 
   const [isShowSubCategories, setShowSubCategories] = useState(false);
+  const [isEditMode, setEditMode] = useState(false);
+  const SubCategoriesElement = ({ categoryNo, categoryName, categoryDescription }) => {
 
-  const SubCategoriesElement = ({ categoryName, categoryDescription }) => {
+    const deleteCategory = async () => {
+      const requestBody = {
+        "categoryNo": categoryNo
+      }
+      const response = await deleteApiAuth(API_PATH.DELETE_CATEGORY, requestBody);
+      if (response.ok) {
+        successToast("Xóa thành công");
+        window.location.reload();
+      } else {
+        warningToast("Xóa thất bại. Thử lại sau");
+      }
+    }
 
     return (
       <div className="row">
         <div className="col-6">+ {categoryName}</div>
-        <div className="col-6">{categoryDescription}</div>
+        <div className="col-6">
+          <div className="row" style={{ justifyContent: "space-between", color: "red" }}>
+            <div>{categoryDescription}</div>
+            <div>
+              <i className="fa fa-trash" onClick={deleteCategory} />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 
+  const save = async () => {
+    const requestBody = {
+      "categoryNo": parentCategoryNo,
+      "name": document.getElementById("parentName").innerHTML,
+      "description": document.getElementById("parentDescription").innerHTML
+    }
+    const response = await putApiAuth(API_PATH.EDIT_CATEGORY, requestBody);
+    if (response.ok) {
+      successToast();
+      window.location.reload();
+    } else {
+      warningToast();
+    }
+  }
+
+  const deleteCategory = async () => {
+    const requestBody = {
+      "categoryNo": parentCategoryNo
+    }
+    const response = await deleteApiAuth(API_PATH.DELETE_CATEGORY, requestBody);
+    if (response.ok) {
+      successToast("Xóa thành công");
+      window.location.reload();
+    } else {
+      warningToast("Xóa thất bại. Thử lại sau");
+    }
+  }
+
   return (
-    <div className="col" onClick={() => setShowSubCategories(!isShowSubCategories)}>
+    <div className="col">
       <div className="row">
-        <div className="col-6">- {parentCategoryName}</div>
-        <div className="row" >
-          <div className="col-6">{parentCategoryDescription}</div>
+        <div className="col-6">- <div id="parentName" style={{ display: "inline-block" }} contentEditable={isEditMode}>{parentCategoryName}</div></div>
+        <div className="col-6">
+          <div id="parentDescription" className="col-6" contentEditable={isEditMode}>{parentCategoryDescription}</div>
           <div className="col-6">
-            <i className={isShowSubCategories ? "fas fa-angle-down" : "fas fa-angle-left"} />
+            <div className="row" style={{ justifyContent: "space-between", color: "green" }}>
+              <div>
+                <i className={isShowSubCategories ? "fas fa-angle-down" : "fas fa-angle-left"} onClick={() => setShowSubCategories(!isShowSubCategories)} />
+              </div>
+              <div>
+                <i className="fas fa-edit" onClick={() => setEditMode(!isEditMode)} />
+              </div>
+              <div>
+                <i className="fa fa-trash" onClick={deleteCategory} />
+              </div>
+              <div style={isEditMode ? { display: "block" } : { display: "none" }}>
+                <button type="submit" className="btn btn-primary" onClick={save}>Lưu</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
       {
-        isShowSubCategories && subCategories.length > 0 && 
+        isShowSubCategories && subCategories.length > 0 &&
         <div className="px-5">
           <hr />
-         {subCategories.map((object, id) => <SubCategoriesElement categoryName={object["name"]} categoryDescription={object["description"]} key={object["categoryNo"]} />)}
+          {subCategories.map((object, id) => <SubCategoriesElement categoryNo={object["categoryNo"]} categoryName={object["name"]} categoryDescription={object["description"]} key={object["categoryNo"]} />)}
         </div>
       }
       <hr />
@@ -151,10 +213,10 @@ const Categories = () => {
                 <div className="card-body">
                   <h5>Danh sách mục chi <AddButton onClickFunc={() => setOpenExpenseForm(true)} /></h5>
                   <div className="row mb-3">
-                    <div className="col-6" style={{textAlign: "center"}}>Tên hạng mục</div>
-                    <div className="col-6" style={{textAlign: "center"}}>Mô tả</div>
+                    <div className="col-6" style={{ textAlign: "center" }}>Tên hạng mục</div>
+                    <div className="col-6" style={{ textAlign: "center" }}>Mô tả</div>
                   </div>
-                  {expenseCategories.length === 0 ? <div>Không có dữ liệu</div> : expenseCategories.map((object, index) => <ParentElement key={object["parentCategoryNo"]} parentCategoryName={object["parentCategoryName"]} parentCategoryDescription={object["parentCategoryDescription"]} subCategories={object["subCategories"]} />)}
+                  {expenseCategories.length === 0 ? <div>Không có dữ liệu</div> : expenseCategories.map((object, index) => <ParentElement key={object["parentCategoryNo"]} parentCategoryNo={object["parentCategoryNo"]} parentCategoryName={object["parentCategoryName"]} parentCategoryDescription={object["parentCategoryDescription"]} subCategories={object["subCategories"]} />)}
                 </div>
               </div>
 
@@ -162,10 +224,10 @@ const Categories = () => {
                 <div className="card-body">
                   <h5>Danh sách mục thu <AddButton onClickFunc={() => setOpenIncomeForm(true)} /></h5>
                   <div className="row mb-3">
-                    <div className="col-6" style={{textAlign: "center"}}>Tên hạng mục</div>
-                    <div className="col-6" style={{textAlign: "center"}}>Mô tả</div>
+                    <div className="col-6" style={{ textAlign: "center" }}>Tên hạng mục</div>
+                    <div className="col-6" style={{ textAlign: "center" }}>Mô tả</div>
                   </div>
-                  {incomeCategories.length === 0 ? <div>Không có dữ liệu</div> : incomeCategories.map((object, index) => <ParentElement key={object["parentCategoryNo"]} parentCategoryName={object["parentCategoryName"]} parentCategoryDescription={object["parentCategoryDescription"]} subCategories={object["subCategories"]} />)}
+                  {incomeCategories.length === 0 ? <div>Không có dữ liệu</div> : incomeCategories.map((object, index) => <ParentElement key={object["parentCategoryNo"]} parentCategoryNo={object["parentCategoryNo"]} parentCategoryName={object["parentCategoryName"]} parentCategoryDescription={object["parentCategoryDescription"]} subCategories={object["subCategories"]} />)}
                 </div>
               </div>
             </div>
