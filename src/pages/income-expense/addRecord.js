@@ -9,6 +9,7 @@ import DateTimePicker from "react-datetime-picker";
 import { API_PATH } from "../../config/api";
 import { OPERATION_TYPE_CODE } from "../../config/constant";
 import { successToast, warningToast } from "../../common/toast";
+import { AddButton } from "../../components/button";
 
 const NewExpenseIncomeForm = ({ wallets, categories, setWalletNo, setCategoryNo }) => {
 
@@ -19,7 +20,7 @@ const NewExpenseIncomeForm = ({ wallets, categories, setWalletNo, setCategoryNo 
       <div className="form-group">
         <label>Chọn hạng mục <RequireStar /></label>
         <select class="form-control mb-3" onChange={(e) => setCategoryNo(e.target.value)}>
-        <option value={null} selected={true}></option>
+          <option value={null} selected={true}></option>
           {
             options.length !== 0 && options.map((object, index) => <option value={object["categoryNo"]}>{object["categoryName"]}</option>)
           }
@@ -29,7 +30,7 @@ const NewExpenseIncomeForm = ({ wallets, categories, setWalletNo, setCategoryNo 
       <div className="form-group">
         <label>Tài khoản <RequireStar /></label>
         <select class="form-control mb-3" onChange={(e) => setWalletNo(e.target.value)}>
-        <option value={null} selected={true}></option>
+          <option value={null} selected={true}></option>
           {
             wallets.length !== 0 && wallets.map((object, index) => <option value={object["walletNo"]}>{object["name"]}</option>)
           }
@@ -39,49 +40,31 @@ const NewExpenseIncomeForm = ({ wallets, categories, setWalletNo, setCategoryNo 
   );
 }
 
-const NewLendForm = () => {
-  const [collectionDate, setCollectionDate] = useState(new Date());
-
+const NewDebtForm = ({ label, currentUserDebtInfo, setUserDebtInfoNo, setUserDebtInfoName, setExpectCollectDate, newUserDebt, setNewUserDebt }) => {
+  const now = new Date();
   return (
     <div>
       <div className="form-group">
-        <label>Người cho vay</label>
-        <select class="form-control mb-3">
-          <option>Em Vinh</option>
-          <option>Em Hiếu</option>
-          <option>Anh Minh</option>
-        </select>
+        <label>{label} <RequireStar /><AddButton onClickFunc={() => setNewUserDebt(!newUserDebt)} /></label>
+        <>
+          {newUserDebt ?
+            <input type="text" className="form-control" id="amount" placeholder={label} onChange={(e) => setUserDebtInfoName(e.target.value)} /> :
+            <select className="form-control mb-3" onChange={(e) => setUserDebtInfoNo(e.target.value)}>
+              {currentUserDebtInfo != null && currentUserDebtInfo.length !== 0 ?
+                currentUserDebtInfo.map((object, index) => <option value={object["userDebtInfoNo"]}>{object["name"]}</option>) :
+                <option value={null}></option>}
+            </select>}
+        </>
       </div>
       <div className="form-group">
         <label>Thời gian hoàn trả dự kiến</label>
-        <DateTimePicker format="h:mm:ss dd-MM-y a" onChange={setCollectionDate} value={collectionDate} className="ml-3" />
+        <DateTimePicker format="dd-MM-y" onChange={setExpectCollectDate} value={now} className="ml-3" />
       </div>
     </div>
   );
 }
 
-const NewBorrowForm = () => {
-  const [collectionDate, setCollectionDate] = useState(new Date());
-
-  return (
-    <div>
-      <div className="form-group">
-        <label>Người cho mượn</label>
-        <select class="form-control mb-3">
-          <option>Em Vinh</option>
-          <option>Em Hiếu</option>
-          <option>Anh Minh</option>
-        </select>
-      </div>
-      <div className="form-group">
-        <label>Thời gian hoàn trả dự kiến</label>
-        <DateTimePicker format="h:mm:ss dd-MM-y a" onChange={setCollectionDate} value={collectionDate} className="ml-3" />
-      </div>
-    </div>
-  );
-}
-
-const AddRecordForm = ({ wallets, expenseCategories, incomeCategories }) => {
+const AddRecordForm = ({ wallets, expenseCategories, incomeCategories, currentUserDebtInfo }) => {
 
   const [selected, setSelected] = useState("expense");
   const [walletNo, setWalletNo] = useState("");
@@ -89,6 +72,10 @@ const AddRecordForm = ({ wallets, expenseCategories, incomeCategories }) => {
   const [amount, setAmount] = useState(0);
   const [date, setDate] = useState(new Date());
   const [description, setDescription] = useState("");
+  const [newUserDebt, setNewUserDebt] = useState(false);
+  const [userDebtInfoNo, setUserDebtInfoNo] = useState("");
+  const [userDebtInfoName, setUserDebtInfoName] = useState("");
+  const [expectCollectDate, setExpectCollectDate] = useState(new Date());
 
   const selectType = (e) => {
     setSelected(e.target.value);
@@ -112,66 +99,86 @@ const AddRecordForm = ({ wallets, expenseCategories, incomeCategories }) => {
       default:
         break;
     }
+    if (selected == "expense" || selected == "income") {
+      const requestBody = {
+        "createdOn": convertDateToString(date),
+        "amount": parseInt(amount, 10),
+        "description": description,
+        "walletNo": walletNo,
+        "categoryNo": categoryNo,
+        "operationCode": operationType
+      };
 
-    const requestBody = {
-      "createdOn": convertDateToString(date),
-      "amount": parseInt(amount, 10),
-      "description": description,
-      "walletNo": walletNo,
-      "categoryNo": categoryNo,
-      "operationCode": operationType
-    };
-
-    const response = await postApiAuth(API_PATH.NEW_EXPENSE_INCOME, requestBody);
-    if (response.ok) {
-      successToast();
+      const response = await postApiAuth(API_PATH.NEW_EXPENSE_INCOME, requestBody);
+      if (response.ok) {
+        successToast();
+      } else {
+        warningToast();
+      }
     } else {
-      warningToast();
+      const requestBody = {
+        "createdOn": convertDateToString(date),
+        "amount": parseInt(amount, 10),
+        "description": description,
+        "operationCode": operationType,
+        "createdDate": convertDateToString(date),
+        "expectCollectDate": convertDateToString(expectCollectDate),
+        "userDebtInfoNo": userDebtInfoNo,
+        "isNewUserDebtInfo": newUserDebt ? 1 : 0,
+        "userDebtInfoName": userDebtInfoName
+      }
+
+      const response = await postApiAuth(API_PATH.NEW_DEBT_INFO, requestBody);
+      if (response.ok) {
+        successToast();
+      } else {
+        warningToast();
+      }
     }
   }
 
   return (
     <div>
       <div className="card card-primary">
-          <div className="card-body">
-            <select className="form-control mb-3" onChange={selectType}>
-              <option value={"expense"}>Chi tiền</option>
-              <option value={"income"}>Thu tiền</option>
-              <option value={"lend"}>Đi vay</option>
-              <option value={"borrow"}>Cho vay</option>
-            </select>
-            <div className="form-group">
-              <label htmlFor="amount">Số tiền (đ) <RequireStar /></label>
-              <input type="number" className="form-control" id="amount" placeholder="Số tiền" required onChange={(e) => setAmount(e.target.value)} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="inputeFile">Ảnh gợi nhớ</label>
-              <div className="input-group">
-                <div className="custom-file">
-                  <input type="file" className="custom-file-input" id="inputeFile" />
-                  <label className="custom-file-label" htmlFor="inputeFile">Chọn file</label>
-                </div>
+        <div className="card-body">
+          <select className="form-control mb-3" onChange={selectType}>
+            <option value={"expense"}>Chi tiền</option>
+            <option value={"income"}>Thu tiền</option>
+            <option value={"lend"}>Đi vay</option>
+            <option value={"borrow"}>Cho vay</option>
+          </select>
+          <div className="form-group">
+            <label htmlFor="amount">Số tiền (đ) <RequireStar /></label>
+            <input type="number" className="form-control" id="amount" placeholder="Số tiền" required onChange={(e) => setAmount(e.target.value)} />
+          </div>
+          <div className="form-group">
+            <label htmlFor="inputeFile">Ảnh gợi nhớ</label>
+            <div className="input-group">
+              <div className="custom-file">
+                <input type="file" className="custom-file-input" id="inputeFile" />
+                <label className="custom-file-label" htmlFor="inputeFile">Chọn file</label>
               </div>
             </div>
-            <div className="form-group">
-              <label>Thời gian <RequireStar /></label>
-              <DateTimePicker format="h:mm:ss dd-MM-y a" onChange={setDate} value={date} className="ml-3" />
-            </div>
-            <div className="form-group">
-              <label htmlFor="amount">Mô tả</label>
-              <input type="amount" className="form-control" id="amount" placeholder="Mô tả" onChange={(e) => setDescription(e.target.value)} />
-            </div>
-
-            {selected === "expense" ? <NewExpenseIncomeForm wallets={wallets} categories={expenseCategories} setWalletNo={setWalletNo} setCategoryNo={setCategoryNo} /> : null}
-            {selected === "income" ? <NewExpenseIncomeForm wallets={wallets} categories={incomeCategories} setWalletNo={setWalletNo} setCategoryNo={setCategoryNo} /> : null}
-            {selected === "lend" ? <NewLendForm /> : null}
-            {selected === "borrow" ? <NewBorrowForm /> : null}
-
+          </div>
+          <div className="form-group">
+            <label>Thời gian <RequireStar /></label>
+            <DateTimePicker format="dd-MM-y" onChange={setDate} value={date} className="ml-3" />
+          </div>
+          <div className="form-group">
+            <label htmlFor="amount">Mô tả</label>
+            <input type="amount" className="form-control" id="amount" placeholder="Mô tả" onChange={(e) => setDescription(e.target.value)} />
           </div>
 
-          <div className="card-footer">
-            <button type="submit" className="btn btn-primary" onClick={submit}>Lưu</button>
-          </div>
+          {selected === "expense" ? <NewExpenseIncomeForm wallets={wallets} categories={expenseCategories} setWalletNo={setWalletNo} setCategoryNo={setCategoryNo} /> : null}
+          {selected === "income" ? <NewExpenseIncomeForm wallets={wallets} categories={incomeCategories} setWalletNo={setWalletNo} setCategoryNo={setCategoryNo} /> : null}
+          {selected === "lend" ? <NewDebtForm label={"Người cho vay"} currentUserDebtInfo={currentUserDebtInfo} newUserDebt={newUserDebt} setNewUserDebt={setNewUserDebt} setUserDebtInfoNo={setUserDebtInfoNo} setUserDebtInfoName={setUserDebtInfoName} setExpectCollectDate={setExpectCollectDate} /> : null}
+          {selected === "borrow" ? <NewDebtForm label={"Người mượn"} currentUserDebtInfo={currentUserDebtInfo} newUserDebt={newUserDebt} setNewUserDebt={setNewUserDebt} setUserDebtInfoNo={setUserDebtInfoNo} setUserDebtInfoName={setUserDebtInfoName} setExpectCollectDate={setExpectCollectDate} /> : null}
+
+        </div>
+
+        <div className="card-footer">
+          <button type="submit" className="btn btn-primary" onClick={submit}>Lưu</button>
+        </div>
 
       </div>
     </div>
@@ -183,6 +190,7 @@ const AddRecord = () => {
   const [wallets, setWallets] = useState([]);
   const [expenseCategories, setExpenseCategories] = useState([]);
   const [incomeCategories, setIncomeCategories] = useState([]);
+  const [currentUserDebtInfo, setCurrentUserDebtInfo] = useState([]);
 
   useEffect(() => {
 
@@ -203,6 +211,12 @@ const AddRecord = () => {
       if (incomeResponse.ok) {
         const body = await incomeResponse.json();
         setIncomeCategories(body);
+      }
+
+      const userDebtInfoResponse = await getApiAuth(API_PATH.GET_ALL_USER_DEBT_INFO);
+      if (userDebtInfoResponse.ok) {
+        const body = await userDebtInfoResponse.json();
+        setCurrentUserDebtInfo(body);
       }
     }
 
@@ -232,7 +246,7 @@ const AddRecord = () => {
             </div>
           </div>
         </section>
-        <AddRecordForm wallets={wallets} expenseCategories={expenseCategories} incomeCategories={incomeCategories} />
+        <AddRecordForm wallets={wallets} expenseCategories={expenseCategories} incomeCategories={incomeCategories} currentUserDebtInfo={currentUserDebtInfo} />
       </div>
 
     </div>

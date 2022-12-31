@@ -17,5 +17,7 @@ export const API_PATH = {
   NEW_RECURRING_TRANSACTION: "/recurring-transaction/new",
   GET_ALL_RECURRING_TRANSACTION: "/recurring-transaction/get-all",
   EDIT_RECURRING_TRANSACTION: "/recurring-transaction/update",
-  DELETE_RECURRING_TRANSACTION: "/recurring-transaction/delete"
+  DELETE_RECURRING_TRANSACTION: "/recurring-transaction/delete",
+  GET_ALL_USER_DEBT_INFO: "/user-debt-info/get-all",
+  NEW_DEBT_INFO: "/debt/new",
 }
