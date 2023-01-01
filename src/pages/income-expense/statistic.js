@@ -4,7 +4,11 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import Sidebar from "../../components/sidebar";
 import Header from "../../components/header";
 import CanvasJSReact from "../../plugins/canvasjs-non-commercial-3.7.2/canvasjs.react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getApiAuth, putApiAuth } from '../../common/apiCaller';
+import { API_PATH } from '../../config/api';
+import { convertToVNDFormat } from '../../common/stringFormat';
+import { successToast, warningToast } from '../../common/toast';
 
 const CanvasJSChart = CanvasJSReact.CanvasJSChart;
 const options = {
@@ -18,7 +22,7 @@ const options = {
     includeZero: true
   },
   data: [{
-    type: "column", 
+    type: "column",
     indexLabelFontColor: "#5A5757",
     indexLabelPlacement: "outside",
   }]
@@ -27,7 +31,7 @@ const options = {
 const DropDownSelectBox = ({ setShowChart, backColor }) => {
   const handleChange = (e) => {
     const value = e.target.value;
-    var newShowChart = {month: false, quarter: false, year: false};
+    var newShowChart = { month: false, quarter: false, year: false };
     newShowChart[value] = true;
     setShowChart(newShowChart);
   }
@@ -46,13 +50,13 @@ const DropDownSelectBox = ({ setShowChart, backColor }) => {
 }
 
 const SelectPeriodButton = ({ setShowChart }) => {
-  const [localShowChart, setLocalShowChart] = useState({month: true, quarter: false, year: false});
-  const handleChange = ( value ) => {
-    var newShowChart = {month: false, quarter: false, year: false};
+  const [localShowChart, setLocalShowChart] = useState({ month: true, quarter: false, year: false });
+  const handleChange = (value) => {
+    var newShowChart = { month: false, quarter: false, year: false };
     newShowChart[value] = true;
     setShowChart(newShowChart);
     setLocalShowChart(newShowChart);
-  } 
+  }
 
   return (
     <div className="row" >
@@ -64,6 +68,24 @@ const SelectPeriodButton = ({ setShowChart }) => {
 }
 
 const GeneralStatistic = () => {
+
+  const [generalData, setGeneralData] = useState({});
+
+  useEffect(() => {
+
+    async function fetchData() {
+      const response = await getApiAuth(API_PATH.STATISTIC_GENERAL);
+      if (response.ok) {
+        const body = await response.json();
+        setGeneralData(body);
+      }
+    }
+
+    fetchData();
+    console.log("General data: ", generalData);
+  }
+    , []);
+
   return (
     <div className="container-fluid">
       <div className="row">
@@ -76,20 +98,26 @@ const GeneralStatistic = () => {
               <div className="row">
                 <div className="col-sm-4 col-6">
                   <div className="description-block border-right">
-                    <h5 className="description-header">$35,210.43</h5>
-                    <span className="description-text">TÀI CHÍNH HIỆN TẠI <span style={{ opacity: 0.5 }}>(1) - (2)</span></span>
+                    <h5 className="description-header">{convertToVNDFormat(generalData["currentBalance"])}</h5>
+                    <span className="description-text">TÀI CHÍNH HIỆN TẠI <span style={{ opacity: 0.5 }}>(1) - (2) + (3)</span></span>
                   </div>
                 </div>
                 <div className="col-sm-4 col-6">
                   <div className="description-block border-right">
-                    <h5 className="description-header text-success">$10,390.90</h5>
+                    <h5 className="description-header text-success">{convertToVNDFormat(generalData["currentHave"])}</h5>
                     <span className="description-text">TỔNG CÓ <span style={{ opacity: 0.5 }}>(1)</span></span>
                   </div>
                 </div>
                 <div className="col-sm-4 col-6">
                   <div className="description-block">
-                    <h5 className="description-header text-danger">$24,813.53</h5>
+                    <h5 className="description-header text-danger">{convertToVNDFormat(generalData["currentBorrow"])}</h5>
                     <span className="description-text">TỔNG NỢ <span style={{ opacity: 0.5 }}>(2)</span></span>
+                  </div>
+                </div>
+                <div className="col-sm-4 col-6">
+                  <div className="description-block border-right">
+                    <h5 className="description-header text-warning">{convertToVNDFormat(generalData["currentLend"])}</h5>
+                    <span className="description-text">TỔNG CHO VAY <span style={{ opacity: 0.5 }}>(3)</span></span>
                   </div>
                 </div>
               </div>
@@ -102,16 +130,36 @@ const GeneralStatistic = () => {
 }
 
 const ExpenseVsIncomeGraph = () => {
+
+  const [monthDataPoints, setMonthDataPoints] = useState([]);
+  const [quarterDataPoints, setQuarterDataPoints] = useState([]);
+  const [yearDataPoints, setYearDataPoints] = useState([]);
+
+  useEffect(() => {
+
+    async function fetchData() {
+      const response = await getApiAuth(API_PATH.STATISTIC_EXPENSE_INCOME_GRAPH);
+      if (response.ok) {
+        const body = await response.json();
+        setMonthDataPoints(body["month"]);
+        setQuarterDataPoints(body["quarter"]);
+        setYearDataPoints(body["year"]);
+      }
+    }
+
+    fetchData();
+
+  }, []);
+
   const monthChart = <CanvasJSChart options={{
     ...options, axisX: { ...options.axisX, title: "Tháng" }, data: [{
-      ...options.data, dataPoints: [
-        { label: "1", y: -10 }, { label: "2", y: 15 }, { label: "3", y: 25 }, { label: "4", y: 30 }, { label: "5", y: 28 }, { label: "6", y: 10 }, { label: "7", y: 15 }, { label: "8", y: 25 }, { label: "9", y: 30 }, { label: "10", y: 28 }, { label: "11", y: 30 }, { label: "12", y: 28 },]
+      ...options.data, dataPoints: monthDataPoints
     }]
   }} />;
-  const quarterChart = <CanvasJSChart options={{ ...options, axisX: { ...options.axisX, title: "Quý" }, data: [{ ...options.data, dataPoints: [{ label: "1-3", y: -10 }, { label: "4-6", y: 15 }, { label: "6-9", y: 25 }, { label: "9-12", y: 50 },] }] }} />;
-  const yearChart = <CanvasJSChart options={{ ...options, axisX: { ...options.axisX, title: "Năm" }, data: [{ ...options.data, dataPoints: [{ label: "2020", y: -10 }, { label: "2021", y: 15 }, { label: "2022", y: 1000 },] }] }} />
+  const quarterChart = <CanvasJSChart options={{ ...options, axisX: { ...options.axisX, title: "Quý" }, data: [{ ...options.data, dataPoints: quarterDataPoints }] }} />;
+  const yearChart = <CanvasJSChart options={{ ...options, axisX: { ...options.axisX, title: "Năm" }, data: [{ ...options.data, dataPoints: yearDataPoints }] }} />
 
-  const [showChart, setShowChart] = useState({month: true, quarter: false, year: false});
+  const [showChart, setShowChart] = useState({ month: true, quarter: false, year: false });
 
   return (
     <div className="container-fluid">
@@ -143,17 +191,37 @@ const ExpenseVsIncomeGraph = () => {
 }
 
 const ExpenseGraph = () => {
+
+  const [monthDataPoints, setMonthDataPoints] = useState([]);
+  const [quarterDataPoints, setQuarterDataPoints] = useState([]);
+  const [yearDataPoints, setYearDataPoints] = useState([]);
+
+  useEffect(() => {
+
+    async function fetchData() {
+      const response = await getApiAuth(API_PATH.STATISTIC_EXPENSE_GRAPH);
+      if (response.ok) {
+        const body = await response.json();
+        setMonthDataPoints(body["month"]);
+        setQuarterDataPoints(body["quarter"]);
+        setYearDataPoints(body["year"]);
+      }
+    }
+
+    fetchData();
+
+  }, []);
+
   const monthChart = <CanvasJSChart options={{
     ...options, axisX: { ...options.axisX, title: "Tháng" }, data: [{
-      ...options.data, dataPoints: [
-        { label: "1", y: -10 }, { label: "2", y: 15 }, { label: "3", y: 25 }, { label: "4", y: 30 }, { label: "5", y: 28 }, { label: "6", y: 10 }, { label: "7", y: 15 }, { label: "8", y: 25 }, { label: "9", y: 30 }, { label: "10", y: 28 }, { label: "11", y: 30 }, { label: "12", y: 28 },]
+      ...options.data, dataPoints: monthDataPoints
     }]
   }} />;
-  const quarterChart = <CanvasJSChart options={{ ...options, axisX: { ...options.axisX, title: "Quý" }, data: [{ ...options.data, dataPoints: [{ label: "1-3", y: -10 }, { label: "4-6", y: 15 }, { label: "6-9", y: 25 }, { label: "9-12", y: 50 },] }] }} />;
-  const yearChart = <CanvasJSChart options={{ ...options, axisX: { ...options.axisX, title: "Năm" }, data: [{ ...options.data, dataPoints: [{ label: "2020", y: -10 }, { label: "2021", y: 15 }, { label: "2022", y: 1000 },] }] }} />
+  const quarterChart = <CanvasJSChart options={{ ...options, axisX: { ...options.axisX, title: "Quý" }, data: [{ ...options.data, dataPoints: quarterDataPoints }] }} />;
+  const yearChart = <CanvasJSChart options={{ ...options, axisX: { ...options.axisX, title: "Năm" }, data: [{ ...options.data, dataPoints: yearDataPoints }] }} />
 
-  const [showChart, setShowChart] = useState({month: true, quarter: false, year: false});
-  
+  const [showChart, setShowChart] = useState({ month: true, quarter: false, year: false });
+
   return (
     <div className="container-fluid">
       <div className="card">
@@ -184,17 +252,36 @@ const ExpenseGraph = () => {
 }
 
 const IncomeGraph = () => {
+
+  const [monthDataPoints, setMonthDataPoints] = useState([]);
+  const [quarterDataPoints, setQuarterDataPoints] = useState([]);
+  const [yearDataPoints, setYearDataPoints] = useState([]);
+
+  useEffect(() => {
+
+    async function fetchData() {
+      const response = await getApiAuth(API_PATH.STATISTIC_INCOME_GRAPH);
+      if (response.ok) {
+        const body = await response.json();
+        setMonthDataPoints(body["month"]);
+        setQuarterDataPoints(body["quarter"]);
+        setYearDataPoints(body["year"]);
+      }
+    }
+
+    fetchData();
+
+  }, []);
   const monthChart = <CanvasJSChart options={{
     ...options, axisX: { ...options.axisX, title: "Tháng" }, data: [{
-      ...options.data, dataPoints: [
-        { label: "1", y: -10 }, { label: "2", y: 15 }, { label: "3", y: 25 }, { label: "4", y: 30 }, { label: "5", y: 28 }, { label: "6", y: 10 }, { label: "7", y: 15 }, { label: "8", y: 25 }, { label: "9", y: 30 }, { label: "10", y: 28 }, { label: "11", y: 30 }, { label: "12", y: 28 },]
+      ...options.data, dataPoints: monthDataPoints
     }]
   }} />;
-  const quarterChart = <CanvasJSChart options={{ ...options, axisX: { ...options.axisX, title: "Quý" }, data: [{ ...options.data, dataPoints: [{ label: "1-3", y: -10 }, { label: "4-6", y: 15 }, { label: "6-9", y: 25 }, { label: "9-12", y: 50 },] }] }} />;
-  const yearChart = <CanvasJSChart options={{ ...options, axisX: { ...options.axisX, title: "Năm" }, data: [{ ...options.data, dataPoints: [{ label: "2020", y: -10 }, { label: "2021", y: 15 }, { label: "2022", y: 1000 },] }] }} />
+  const quarterChart = <CanvasJSChart options={{ ...options, axisX: { ...options.axisX, title: "Quý" }, data: [{ ...options.data, dataPoints: quarterDataPoints }] }} />;
+  const yearChart = <CanvasJSChart options={{ ...options, axisX: { ...options.axisX, title: "Năm" }, data: [{ ...options.data, dataPoints: yearDataPoints }] }} />
 
-  const [showChart, setShowChart] = useState({month: true, quarter: false, year: false});
-  
+  const [showChart, setShowChart] = useState({ month: true, quarter: false, year: false });
+
   return (
     <div className="container-fluid">
       <div className="card">
@@ -233,7 +320,7 @@ const LendGraph = () => {
   const [showLendStatistic, setShowLendStatistic] = useState(true);
   const [showBorrowStatistic, setShowBorrowStatistic] = useState(false);
   const [showListElement, setShowListElement] = useState(true);
-  
+
   const lendButtonClick = () => {
     if (lendButtonClass !== primaryButtonClass) {
       setLendButtonClass(primaryButtonClass);
@@ -254,119 +341,84 @@ const LendGraph = () => {
     }
   }
 
-  const LendStatistic = () => {
+  const DebtStatistic = ({ apiPath }) => {
+
+    const [totalDebt, setTotalDebt] = useState(0);
+    const [remainingDebt, setRemainingDebt] = useState(0);
+    const [returnedDebt, setReturnedDebt] = useState(0);
+    const [infoList, setInfoList] = useState([]);
+
+    useEffect(() => {
+
+      async function fetchData() {
+        const response = await getApiAuth(apiPath);
+        if (response.ok) {
+          const body = await response.json();
+          setTotalDebt(body["totalDebt"]);
+          setRemainingDebt(body["remainingDebt"]);
+          setReturnedDebt(body["returnedDebt"]);
+          setInfoList(body["infoList"]);
+        }
+      }
+
+      fetchData();
+
+    }, []);
+
+    const deleteDebt = async ( userDebtInfoNo ) => {
+      const apiPath = API_PATH.DEBT_DELETE_BY_USER_DEBT_INFO_NO + "/" + userDebtInfoNo;
+      const response = await putApiAuth(apiPath);
+      if (response.ok) {
+        successToast();
+        window.location.reload();
+      } else {
+        warningToast("Có lỗi xảy ra. Vui lòng thử lại sau");
+      }
+    }
+
     const List = () => {
       return (
         <ListGroup as="ol" numbered>
-          <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
-            <div className="ms-2 me-auto">
-              <div className="fw-bold">Việt Anh</div>
-            </div>
-            <Badge bg="danger" pill>2.000.000</Badge>
-          </ListGroup.Item>
-          <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
-            <div className="ms-2 me-auto">
-              <div className="fw-bold">Hoàng Long</div>
-            </div>
-            <Badge bg="danger" pill>800.000</Badge>
-          </ListGroup.Item>
-          <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
-            <div className="ms-2 me-auto">
-              <div className="fw-bold">Duy Anh</div>
-            </div>
-            <Badge bg="danger" pill>200.000</Badge>
-          </ListGroup.Item>
-          <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
-            <div className="ms-2 me-auto">
-              <div className="fw-bold">Việt Anh</div>
-            </div>
-            <Badge bg="danger" pill>2.000.000</Badge>
-          </ListGroup.Item>
-          <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
-            <div className="ms-2 me-auto">
-              <div className="fw-bold">Hoàng Long</div>
-            </div>
-            <Badge bg="danger" pill>800.000</Badge>
-          </ListGroup.Item>
-          <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
-            <div className="ms-2 me-auto">
-              <div className="fw-bold">Duy Anh</div>
-            </div>
-            <Badge bg="danger" pill>200.000</Badge>
-          </ListGroup.Item>
-          <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
-            <div className="ms-2 me-auto">
-              <div className="fw-bold">Việt Anh</div>
-            </div>
-            <Badge bg="danger" pill>2.000.000</Badge>
-          </ListGroup.Item>
-          <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
-            <div className="ms-2 me-auto">
-              <div className="fw-bold">Hoàng Long</div>
-            </div>
-            <Badge bg="danger" pill>800.000</Badge>
-          </ListGroup.Item>
-          <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
-            <div className="ms-2 me-auto">
-              <div className="fw-bold">Duy Anh</div>
-            </div>
-            <Badge bg="danger" pill>200.000</Badge>
-          </ListGroup.Item>
-          <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
-            <div className="ms-2 me-auto">
-              <div className="fw-bold">Việt Anh</div>
-            </div>
-            <Badge bg="danger" pill>2.000.000</Badge>
-          </ListGroup.Item>
-          <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
-            <div className="ms-2 me-auto">
-              <div className="fw-bold">Hoàng Long</div>
-            </div>
-            <Badge bg="danger" pill>800.000</Badge>
-          </ListGroup.Item>
-          <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
-            <div className="ms-2 me-auto">
-              <div className="fw-bold">Duy Anh</div>
-            </div>
-            <Badge bg="danger" pill>200.000</Badge>
-          </ListGroup.Item>
+          {infoList.map((object, index) =>
+            <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start" >
+              <div className="ms-2 me-auto">
+                <div className="fw-bold">{object["userName"]}</div>
+              </div>
+              <Badge bg="danger" pill>{convertToVNDFormat(object["amount"])}</Badge>
+              <Badge bg="success" pill><i className='fa fa-check' onClick={() => deleteDebt(object["userDebtInfoNo"])} /></Badge>
+            </ListGroup.Item>
+          )}
         </ListGroup>
       );
     }
 
     const showListClick = () => {
-      setShowListElement( !showListElement );
+      setShowListElement(!showListElement);
     }
-    const now = 37.5;
-    
+    const now = returnedDebt / totalDebt;
+
     return (
-      <div>
-        <div className='mt-2'>Tổng cho vay:<div style={{fontWeight: "bold", display: "inline"}}> 8.000.000 VNĐ</div></div>
-        <div className='mt-2'>Cần thu:<div style={{color: "#dc3545", display: "inline"}}> 5.000.000 VNĐ</div></div>
-        <div className='mt-2'>Đã thu<div style={{color: "#28a745", display: "inline"}}> 3.000.000 VNĐ</div></div>
-        <div className='mt-2'>
-          <ProgressBar now={now} label={`${now}%`} />
-        </div>
-        <div className='mt-2 row' style={{justifyContent: "center"}}>
+      <>
+        {infoList.length !== 0 ? <div>
+          <div className='mt-2'>Tổng cho vay: <div style={{ fontWeight: "bold", display: "inline" }}>{convertToVNDFormat(totalDebt)}</div></div>
+          <div className='mt-2'>Cần thu: <div style={{ color: "#dc3545", display: "inline" }}>{convertToVNDFormat(remainingDebt)}</div></div>
+          <div className='mt-2'>Đã thu: <div style={{ color: "#28a745", display: "inline" }}>{convertToVNDFormat(returnedDebt)}</div></div>
+          <div className='mt-2'>
+            <ProgressBar now={now} label={`${now}%`} />
+          </div>
+          <div className='mt-2 row' style={{ justifyContent: "center" }}>
             <div><h5>Đang theo dõi</h5></div>
             <button type="button" className="btn btn-tool" data-card-widget="collapse" onClick={showListClick}>
               <i className={showListClick ? "fas fa-minus" : "fas fa-plus"} />
             </button>
-        </div>
-        {showListElement ? <List /> : null}
-      </div>
+          </div>
+          {showListElement ? <List /> : null}
+        </div> :
+          <div>Bạn không có khoản nợ nào</div>}
+      </>
     )
   }
 
-  const BorrowStatistic = () => {
-
-    return (
-      <div>
-        <div>Bạn không có khoản nợ nào</div>
-      </div>
-    )
-  }
-  
   return (
     <div className="container-fluid">
       <div className="card">
@@ -393,8 +445,8 @@ const LendGraph = () => {
                 </div>
               </div>
               <div>
-                {showLendStatistic ? <LendStatistic /> : null}
-                {showBorrowStatistic ? <BorrowStatistic /> : null}
+                {showLendStatistic ? <DebtStatistic apiPath={API_PATH.DEBT_GET_ALL_LEND} /> : null}
+                {showBorrowStatistic ? <DebtStatistic apiPath={API_PATH.DEBT_GET_ALL_BORROW} /> : null}
               </div>
             </div>
           </div>

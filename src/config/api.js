@@ -20,4 +20,11 @@ export const API_PATH = {
   DELETE_RECURRING_TRANSACTION: "/recurring-transaction/delete",
   GET_ALL_USER_DEBT_INFO: "/user-debt-info/get-all",
   NEW_DEBT_INFO: "/debt/new",
+  STATISTIC_GENERAL: "/statistic/general",
+  STATISTIC_EXPENSE_INCOME_GRAPH: "/statistic/expense-income-graph",
+  STATISTIC_EXPENSE_GRAPH: "/statistic/expense-graph",
+  STATISTIC_INCOME_GRAPH: "/statistic/income-graph",
+  DEBT_GET_ALL_BORROW: "/debt/get-all-borrow",
+  DEBT_GET_ALL_LEND: "/debt/get-all-lend",
+  DEBT_DELETE_BY_USER_DEBT_INFO_NO: "/debt/delete-by-user"
 }

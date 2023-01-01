@@ -50,9 +50,9 @@ const NewDebtForm = ({ label, currentUserDebtInfo, setUserDebtInfoNo, setUserDeb
           {newUserDebt ?
             <input type="text" className="form-control" id="amount" placeholder={label} onChange={(e) => setUserDebtInfoName(e.target.value)} /> :
             <select className="form-control mb-3" onChange={(e) => setUserDebtInfoNo(e.target.value)}>
-              {currentUserDebtInfo != null && currentUserDebtInfo.length !== 0 ?
-                currentUserDebtInfo.map((object, index) => <option value={object["userDebtInfoNo"]}>{object["name"]}</option>) :
-                <option value={null}></option>}
+              <option value={null}></option>
+              {currentUserDebtInfo != null && currentUserDebtInfo.length !== 0 &&
+                currentUserDebtInfo.map((object, index) => <option value={object["userDebtInfoNo"]}>{object["name"]}</option>)}
             </select>}
         </>
       </div>
