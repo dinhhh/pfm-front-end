@@ -41,7 +41,7 @@ const Sidebar = () => {
           </div>
           <div className="info">
             {/* TODO: Get user name from API */}
-            <a href="#" className="d-block">Alexander Pierce</a>
+            <a href="#" className="d-block">admin</a>
           </div>
         </div>
         {/* Sidebar Menu */}

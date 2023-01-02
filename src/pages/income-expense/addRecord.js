@@ -151,7 +151,7 @@ const AddRecordForm = ({ wallets, expenseCategories, incomeCategories, currentUs
             <label htmlFor="amount">Số tiền (đ) <RequireStar /></label>
             <input type="number" className="form-control" id="amount" placeholder="Số tiền" required onChange={(e) => setAmount(e.target.value)} />
           </div>
-          <div className="form-group">
+          {/* <div className="form-group">
             <label htmlFor="inputeFile">Ảnh gợi nhớ</label>
             <div className="input-group">
               <div className="custom-file">
@@ -159,7 +159,7 @@ const AddRecordForm = ({ wallets, expenseCategories, incomeCategories, currentUs
                 <label className="custom-file-label" htmlFor="inputeFile">Chọn file</label>
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="form-group">
             <label>Thời gian <RequireStar /></label>
             <DateTimePicker format="dd-MM-y" onChange={setDate} value={date} className="ml-3" />

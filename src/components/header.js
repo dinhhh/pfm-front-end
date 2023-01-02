@@ -1,5 +1,44 @@
+import { useEffect, useState } from "react";
+import { getApiAuth, putApiAuth } from "../common/apiCaller";
+import { warningToast } from "../common/toast";
+import { API_PATH } from "../config/api";
+
 const Header = () => {
-  // TODO: Change href = # to our logic business 
+
+  const [showNoti, setShowNoti] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [totalUnreadNotification, setTotalUnreadNotification] = useState(0);
+
+  useEffect(() => {
+
+    async function fetchData() {
+      console.log("Fetch notifications");
+      const response = await getApiAuth(API_PATH.GET_ALL_NOTIFICATION);
+      if (response.ok) {
+        const body = await response.json();
+        setNotifications(body);
+        const totalUnread = notifications.filter((e) => !e["read"]).length;
+        setTotalUnreadNotification(totalUnread);
+        console("Total unread noti: ", totalUnread);
+      }
+    }
+
+    fetchData();
+
+  }, []);
+
+  const makeNotificationRead = async (notificationNo) => {
+
+    const apiPath = API_PATH.READ_NOTIFICATION + "/" + notificationNo;
+    const response = await putApiAuth(apiPath);
+    if (response.ok) {
+      window.location.reload();
+    } else {
+      warningToast("Có lỗi xảy ra khi đọc thông báo. Vui lòng thử lại sau");
+    }
+    
+  }
+
   return (
     <nav className="main-header navbar navbar-expand navbar-white navbar-light">
       {/* Left navbar links */}
@@ -8,7 +47,7 @@ const Header = () => {
           <a className="nav-link" data-widget="pushmenu" href="#" role="button"><i className="fas fa-bars" /></a>
         </li>
         <li className="nav-item d-none d-sm-inline-block">
-          <a href="index3.html" className="nav-link">Trang chủ</a>
+          <a href="#" className="nav-link">Trang chủ</a>
         </li>
         <li className="nav-item d-none d-sm-inline-block">
           <a href="#" className="nav-link">Liên hệ</a>
@@ -39,34 +78,29 @@ const Header = () => {
       {/* Right navbar links */}
       <ul className="navbar-nav ml-auto">
         {/* Notifications Dropdown Menu */}
-        <li className="nav-item dropdown">
-          <a className="nav-link" data-toggle="dropdown" href="#">
+        <li className={showNoti ? "nav-item dropdown show" : "nav-item dropdown"}>
+          <a className="nav-link" data-toggle="dropdown" href="#" onClick={() => setShowNoti(!showNoti)}>
             <i className="far fa-bell" />
-            <span className="badge badge-warning navbar-badge">15</span>
+            <span className="badge badge-warning navbar-badge" style={totalUnreadNotification == 0 ? { display: "none" } : { display: "inline-block"}}>{totalUnreadNotification}</span>
           </a>
-          <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-            <span className="dropdown-header">15 thông báo</span>
+          <div className={showNoti ? "dropdown-menu dropdown-menu-lg dropdown-menu-right show" :
+            "dropdown-menu dropdown-menu-lg dropdown-menu-right"} style={{ maxWidth: 10000 }}>
+            <span className="dropdown-header">{notifications.length} thông báo</span>
             <div className="dropdown-divider" />
-            <a href="#" className="dropdown-item">
-              <i className="fas fa-envelope mr-2" /> 4 tin nhắn mới
-              <span className="float-right text-muted text-sm">3 phút trước</span>
-            </a>
-            <div className="dropdown-divider" />
-            <a href="#" className="dropdown-item">
-              <i className="fas fa-users mr-2" /> 8 lời mời kết bạn
-              <span className="float-right text-muted text-sm">12 tiếng</span>
-            </a>
-            <div className="dropdown-divider" />
-            <a href="#" className="dropdown-item">
-              <i className="fas fa-file mr-2" /> 3 báo cáo mới
-              <span className="float-right text-muted text-sm">2 ngày trước</span>
-            </a>
+
+            <>
+              {notifications.length !== 0 &&
+                notifications.map((object, index) =>
+                  <a className="dropdown-item" onClick={() => makeNotificationRead(object["notificationNo"])}>
+                    <i className="fas fa-envelope mr-2" style={object["read"] ? { display: "none" } : { display: "inline-block", color: "green" }} />{object["message"]}
+                    <span className="float-right text-muted text-sm">{object["timeAgo"]}</span>
+                  </a>)
+              }
+            </>
+
             <div className="dropdown-divider" />
             <a href="#" className="dropdown-item dropdown-footer">Xem tất cả thông báo</a>
           </div>
-        </li>
-        <li className="nav-item">
-          <a className="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button"><i className="fas fa-th-large" /></a>
         </li>
       </ul>
     </nav>

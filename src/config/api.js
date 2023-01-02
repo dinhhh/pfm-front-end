@@ -26,5 +26,7 @@ export const API_PATH = {
   STATISTIC_INCOME_GRAPH: "/statistic/income-graph",
   DEBT_GET_ALL_BORROW: "/debt/get-all-borrow",
   DEBT_GET_ALL_LEND: "/debt/get-all-lend",
-  DEBT_DELETE_BY_USER_DEBT_INFO_NO: "/debt/delete-by-user"
+  DEBT_DELETE_BY_USER_DEBT_INFO_NO: "/debt/delete-by-user",
+  GET_ALL_NOTIFICATION: "/notification/get-all",
+  READ_NOTIFICATION: "/notification/is-read"
 }
