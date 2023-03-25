@@ -40,7 +40,7 @@ const NewExpenseIncomeForm = ({ wallets, categories, setWalletNo, setCategoryNo 
   );
 }
 
-const NewDebtForm = ({ label, currentUserDebtInfo, setUserDebtInfoNo, setUserDebtInfoName, setExpectCollectDate, newUserDebt, setNewUserDebt }) => {
+const NewDebtForm = ({ label, currentUserDebtInfo, setUserDebtInfoNo, setUserDebtInfoName, setExpectCollectDate, newUserDebt, setNewUserDebt, expectCollectDate }) => {
   const now = new Date();
   return (
     <div>
@@ -58,7 +58,7 @@ const NewDebtForm = ({ label, currentUserDebtInfo, setUserDebtInfoNo, setUserDeb
       </div>
       <div className="form-group">
         <label>Thời gian hoàn trả dự kiến</label>
-        <DateTimePicker format="dd-MM-y" onChange={setExpectCollectDate} value={now} className="ml-3" />
+        <DateTimePicker format="dd-MM-y" onChange={setExpectCollectDate} value={expectCollectDate} className="ml-3" />
       </div>
     </div>
   );
@@ -171,8 +171,8 @@ const AddRecordForm = ({ wallets, expenseCategories, incomeCategories, currentUs
 
           {selected === "expense" ? <NewExpenseIncomeForm wallets={wallets} categories={expenseCategories} setWalletNo={setWalletNo} setCategoryNo={setCategoryNo} /> : null}
           {selected === "income" ? <NewExpenseIncomeForm wallets={wallets} categories={incomeCategories} setWalletNo={setWalletNo} setCategoryNo={setCategoryNo} /> : null}
-          {selected === "lend" ? <NewDebtForm label={"Người cho vay"} currentUserDebtInfo={currentUserDebtInfo} newUserDebt={newUserDebt} setNewUserDebt={setNewUserDebt} setUserDebtInfoNo={setUserDebtInfoNo} setUserDebtInfoName={setUserDebtInfoName} setExpectCollectDate={setExpectCollectDate} /> : null}
-          {selected === "borrow" ? <NewDebtForm label={"Người mượn"} currentUserDebtInfo={currentUserDebtInfo} newUserDebt={newUserDebt} setNewUserDebt={setNewUserDebt} setUserDebtInfoNo={setUserDebtInfoNo} setUserDebtInfoName={setUserDebtInfoName} setExpectCollectDate={setExpectCollectDate} /> : null}
+          {selected === "lend" ? <NewDebtForm label={"Người cho vay"} currentUserDebtInfo={currentUserDebtInfo} newUserDebt={newUserDebt} setNewUserDebt={setNewUserDebt} setUserDebtInfoNo={setUserDebtInfoNo} setUserDebtInfoName={setUserDebtInfoName} setExpectCollectDate={setExpectCollectDate} expectCollectDate={expectCollectDate} /> : null}
+          {selected === "borrow" ? <NewDebtForm label={"Người mượn"} currentUserDebtInfo={currentUserDebtInfo} newUserDebt={newUserDebt} setNewUserDebt={setNewUserDebt} setUserDebtInfoNo={setUserDebtInfoNo} setUserDebtInfoName={setUserDebtInfoName} setExpectCollectDate={setExpectCollectDate} expectCollectDate={expectCollectDate} /> : null}
 
         </div>
 

@@ -341,7 +341,7 @@ const LendGraph = () => {
     }
   }
 
-  const DebtStatistic = ({ apiPath }) => {
+  const DebtStatistic = ({ apiPath, isLend }) => {
 
     const [totalDebt, setTotalDebt] = useState(0);
     const [remainingDebt, setRemainingDebt] = useState(0);
@@ -395,12 +395,12 @@ const LendGraph = () => {
     const showListClick = () => {
       setShowListElement(!showListElement);
     }
-    const now = returnedDebt / totalDebt;
+    const now = (returnedDebt / totalDebt * 100).toFixed(2);
 
     return (
       <>
         {infoList.length !== 0 ? <div>
-          <div className='mt-2'>Tổng cho vay: <div style={{ fontWeight: "bold", display: "inline" }}>{convertToVNDFormat(totalDebt)}</div></div>
+          <div className='mt-2'>{isLend ? "Tổng cho vay:" : "Tổng cho nợ:"} <div style={{ fontWeight: "bold", display: "inline" }}>{convertToVNDFormat(totalDebt)}</div></div>
           <div className='mt-2'>Cần thu: <div style={{ color: "#dc3545", display: "inline" }}>{convertToVNDFormat(remainingDebt)}</div></div>
           <div className='mt-2'>Đã thu: <div style={{ color: "#28a745", display: "inline" }}>{convertToVNDFormat(returnedDebt)}</div></div>
           <div className='mt-2'>
@@ -445,7 +445,7 @@ const LendGraph = () => {
                 </div>
               </div>
               <div>
-                {showLendStatistic ? <DebtStatistic apiPath={API_PATH.DEBT_GET_ALL_LEND} /> : null}
+                {showLendStatistic ? <DebtStatistic apiPath={API_PATH.DEBT_GET_ALL_LEND} isLend={true} /> : null}
                 {showBorrowStatistic ? <DebtStatistic apiPath={API_PATH.DEBT_GET_ALL_BORROW} /> : null}
               </div>
             </div>

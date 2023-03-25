@@ -95,18 +95,6 @@ const Sidebar = () => {
                     <p>Ghi chép định kì</p>
                   </a>
                 </li>
-                {/* <li className="nav-item">
-                  <a href="#" className="nav-link">
-                    <CustomIcon />
-                    <p>Ghi chép mẫu</p>
-                  </a>
-                </li> */}
-                <li className="nav-item">
-                  <a href="/wallet/management" className="nav-link">
-                    <CustomIcon />
-                    <p>Quản lý tài khoản</p>
-                  </a>
-                </li>
               </ul>
             </li>
 
@@ -114,21 +102,15 @@ const Sidebar = () => {
               <a href="#" className="nav-link" onClick={() => showOrHideDetails("asset")}>
                 <i className="nav-icon fas fa-copy" />
                 <p>
-                  Quản lý tài sản
+                  Quản lý tài khoản
                   <i className="right fas fa-angle-left" />
                 </p>
               </a>
               <ul className="nav nav-treeview">
                 <li className="nav-item">
-                  <a href="#" className="nav-link">
+                  <a href="/wallet/management" className="nav-link">
                     <CustomIcon />
-                    <p>Bảng cơ cấu tài sản</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="#" className="nav-link">
-                    <CustomIcon />
-                    <p>Báo cáo</p>
+                    <p>Danh sách tài khoản</p>
                   </a>
                 </li>
               </ul>
@@ -142,6 +124,14 @@ const Sidebar = () => {
                   <i className="right fas fa-angle-left" />
                 </p>
               </a>
+              <ul className="nav nav-treeview">
+                <li className="nav-item">
+                  <a href="/change-password" className="nav-link">
+                    <CustomIcon />
+                    <p>Đổi mật khẩu</p>
+                  </a>
+                </li>
+              </ul>
             </li>
 
           </ul>

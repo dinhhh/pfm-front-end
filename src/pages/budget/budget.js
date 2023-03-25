@@ -44,11 +44,11 @@ const CreateBudget = ({ categoies, wallets }) => {
 
   return (
     <div>
-      <h3>Thêm giới hạn chi</h3>
+      <h3>Thêm hạn mức chi</h3>
       <div className="card-body">
         <div className="form-group">
           <label htmlFor="amount">Số tiền (đ) <RequireStar /></label>
-          <input type="" className="form-control" id="amount" placeholder="Số tiền" require value={convertToVNDFormat(amount)} onChange={(e) => { setAmount(convertVNDToInt(e.target.value)) }} />
+          <input type="number" className="form-control" id="amount" placeholder="Số tiền" require onChange={(e) => { setAmount(e.target.value) }} />
         </div>
 
         <div className="form-group">
@@ -133,10 +133,10 @@ const BudgetListingElement = ({ budgetNo, name, period, amount, remaining, dayLe
           </div>
         </div>
       </div>
-      <ProgressBar now={now | 0} label={`${now}%`} />
+      {/* <ProgressBar now={now | 0} label={`${now}%`} /> */}
       <div className="row" style={{ justifyContent: "space-between" }}>
         <div className="col-4">Còn lại: {dayLeft} ngày</div>
-        <div className="col-4">{convertToVNDFormat(remaining)} VNĐ</div>
+        {/* <div className="col-4">{convertToVNDFormat(remaining)} VNĐ</div> */}
         <div className="col-4"></div>
       </div>
 
@@ -163,7 +163,7 @@ const BudgetListing = ({ btnClickHandle, limitExpenseList }) => {
 
   return (
     <div>
-      <h3>Danh sách giới hạn chi <AddButton onClickFunc={btnClickHandle} /></h3>
+      <h3>Danh sách hạn mức chi <AddButton onClickFunc={btnClickHandle} /></h3>
       <div style={{ overflowY: "scroll", height: 500 }}>
         <>
           {list.length == 0 ? <div>Không có bản ghi</div> : list.map((object, i) => object)}

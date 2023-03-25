@@ -75,7 +75,7 @@ const LoginPage = () => {
                     <button type="submit" className="btn btn-primary btn-block" onClick={onSubmit}>Đăng nhập</button>
                   </div>
                 </div>
-                <div className="social-auth-links text-center mb-3">
+                {/* <div className="social-auth-links text-center mb-3">
                   <p>- Hoặc -</p>
                   <a href="#" className="btn btn-block btn-primary">
                     <i className="fab fa-facebook mr-2" /> Đăng nhập sử dụng Facebook
@@ -86,7 +86,7 @@ const LoginPage = () => {
                 </div>
                 <p className="mb-1">
                   <Link to="/forgot-password">Quên mật khẩu</Link>
-                </p>
+                </p> */}
                 <p className="mb-0">
                   <Link to="/register">Đăng ký tài khoản mới</Link>
                 </p>

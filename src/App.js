@@ -11,6 +11,7 @@ import BudgetPage from './pages/budget/budget';
 import Categories from './pages/income-expense-categories/categories';
 import RecurringTransactions from './pages/recurring-transactions/recurringTransactions';
 import WalletsManagement from './pages/wallet/walletsManagement';
+import ChangePassword from './pages/changePassword';
 
 function App() {
     return (
@@ -31,6 +32,8 @@ function App() {
                     <Route path="/income-expense-categories/categories" component={Categories}/>
                     <Route path="/recurring-transactions/transactions" component={RecurringTransactions} />
                     <Route path="/wallet/management" component={WalletsManagement} />
+                    <Route path="/change-password" component={ChangePassword} />
+                    
                     <Redirect to="/" />
                 </Switch>
             </Router>

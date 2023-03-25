@@ -19,6 +19,23 @@ const AddTransactions = () => {
   const [periodCode, setPeriodCode] = useState(0);
   const [description, setDescription] = useState("");
   const [name, setName] = useState("");
+  const [walletNo, setWalletNo] = useState(null);
+  const [wallets, setWallets] = useState([]);
+
+  useEffect(() => {
+    
+    async function fetchData() {
+
+      const walletResponse = await getApiAuth(API_PATH.GET_ALL_WALLETS);
+      if (walletResponse.ok) {
+        const body = await walletResponse.json();
+        setWallets(body["wallets"]);
+      }
+      
+    }
+
+    fetchData();
+  }, [])
 
   const submit = async () => {
     const requestBody = {
@@ -28,7 +45,8 @@ const AddTransactions = () => {
       "endDate": convertDateToString(endDate),
       "periodCode": periodCode,
       "description": description,
-      "name": name
+      "name": name,
+      "walletNo": walletNo
     };
 
     const response = await postApiAuth(API_PATH.NEW_RECURRING_TRANSACTION, requestBody);
@@ -53,7 +71,7 @@ const AddTransactions = () => {
         </div>
         <div className="form-group">
           <label htmlFor="amount">Số tiền (đ) <RequireStar /></label>
-          <input type="amount" className="form-control" id="amount" placeholder="Số tiền" required value={convertToVNDFormat(amount)} onChange={(e) => { setAmount(convertVNDToInt(e.target.value)) }} />
+          <input type="number" className="form-control" id="amount" placeholder="Số tiền" required onChange={(e) => { setAmount(e.target.value) }} />
         </div>
         <div className="form-group">
           <label htmlFor="amount">Mô tả</label>
@@ -77,6 +95,15 @@ const AddTransactions = () => {
             <option value={4}>Hàng năm</option>
           </select>
         </div>
+        <div className="form-group">
+        <label>Tài khoản <RequireStar /></label>
+        <select class="form-control mb-3" onChange={(e) => setWalletNo(e.target.value)}>
+          <option value={null} selected={true}></option>
+          {
+            wallets.length !== 0 && wallets.map((object, index) => <option value={object["walletNo"]}>{object["name"]}</option>)
+          }
+        </select>
+      </div>
         <button type="submit" className="btn btn-primary" onClick={submit}>Lưu</button>
       </div>
     </div>

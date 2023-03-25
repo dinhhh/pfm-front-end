@@ -28,7 +28,7 @@ export const buildCategory = ( categories ) => {
 
 export const convertDateToString = ( date ) => {
   console.log("Convert date " + date + "; day " + date.getDay() + "; month " + date.getMonth())
-  const dayDate = date.getDate() > 10 ? date.getDate().toString() : "0" + date.getDate().toString();
+  const dayDate = date.getDate() > 9 ? date.getDate().toString() : "0" + date.getDate().toString();
   const monthDate = date.getMonth() > 9 ? (date.getMonth() + 1).toString() : "0" + (date.getMonth() + 1).toString();
   return date.getFullYear().toString() + "-" + monthDate + "-" + dayDate;
 }
